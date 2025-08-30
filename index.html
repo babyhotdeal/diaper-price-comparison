@@ -114,6 +114,21 @@
             box-shadow: none;
         }
 
+        .loading {
+            display: none;
+            text-align: center;
+            color: white;
+            font-size: 1.2em;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .loading.show {
+            display: block;
+        }
+
         .results {
             display: none;
         }
@@ -248,14 +263,31 @@
             100% { transform: scale(1); }
         }
 
-        .no-results {
+        .error-message {
+            display: none;
             text-align: center;
-            color: white;
+            color: #ff6b6b;
             font-size: 1.2em;
-            padding: 50px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
+            padding: 20px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 15px;
+            margin: 20px 0;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .data-source {
+            text-align: center;
+            margin-top: 30px;
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9em;
+        }
+
+        .data-source a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: underline;
         }
 
         @media (max-width: 768px) {
@@ -303,6 +335,14 @@
             </div>
         </div>
 
+        <div class="loading" id="loading">
+            <p>⏳ 데이터를 불러오는 중...</p>
+        </div>
+
+        <div class="error-message" id="error-message">
+            <p>❌ 데이터를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.</p>
+        </div>
+
         <div class="results" id="results">
             <div class="results-header">
                 <h2 id="results-title">검색 결과</h2>
@@ -310,101 +350,103 @@
             </div>
             <div class="product-cards" id="product-cards"></div>
         </div>
+
+        <div class="data-source">
+            <p>데이터 출처: <a href="data/diapers.json" target="_blank">diapers.json</a> | 마지막 업데이트: <span id="last-updated">-</span></p>
+        </div>
     </div>
 
     <script>
-        // 데이터 저장 위치 - 여기에 JSON 데이터를 저장합니다
-        const diaperData = {
-            "하기스": {
-                "네이처메이드 2024 (팬츠)": [
-                    {
-                        "한박스가격": 35800,
-                        "박스당팩수": 3,
-                        "단계": "1단계",
-                        "팩당개수": 66,
-                        "개당가격": 181
-                    },
-                    {
-                        "한박스가격": 35800,
-                        "박스당팩수": 3,
-                        "단계": "2단계",
-                        "팩당개수": 58,
-                        "개당가격": 206
-                    },
-                    {
-                        "한박스가격": 35800,
-                        "박스당팩수": 3,
-                        "단계": "3단계",
-                        "팩당개수": 50,
-                        "개당가격": 239
-                    },
-                    {
-                        "한박스가격": 35800,
-                        "박스당팩수": 3,
-                        "단계": "4단계",
-                        "팩당개수": 40,
-                        "개당가격": 298
-                    },
-                    {
-                        "한박스가격": 35800,
-                        "박스당팩수": 3,
-                        "단계": "5단계",
-                        "팩당개수": 34,
-                        "개당가격": 351
-                    }
-                ],
-                "매직팬티 2024": [
-                    {
-                        "한박스가격": 52000,
-                        "박스당팩수": 4,
-                        "단계": "3단계",
-                        "팩당개수": 24,
-                        "개당가격": 541.6
-                    }
-                ]
-            },
-            "페미": {
-                "슈퍼드라이": [
-                    {
-                        "한박스가격": 28000,
-                        "박스당팩수": 4,
-                        "단계": "신생아",
-                        "팩당개수": 30,
-                        "개당가격": 233
-                    },
-                    {
-                        "한박스가격": 30000,
-                        "박스당팩수": 4,
-                        "단계": "소형",
-                        "팩당개수": 28,
-                        "개당가격": 267
-                    }
-                ]
-            },
-            "마더케이": {
-                "네이처핏": [
-                    {
-                        "한박스가격": 45000,
-                        "박스당팩수": 3,
-                        "단계": "중형",
-                        "팩당개수": 45,
-                        "개당가격": 333
-                    }
-                ]
-            }
-        };
+        // 전역 변수
+        let diaperData = {};
+        const DATA_URL = 'data/diapers.json'; // 데이터 파일 경로
 
-        // DOM 요소 가져오기
+        // DOM 요소
         const brandSelect = document.getElementById('brand-select');
         const productSelect = document.getElementById('product-select');
         const searchBtn = document.getElementById('search-btn');
+        const loading = document.getElementById('loading');
+        const errorMessage = document.getElementById('error-message');
         const results = document.getElementById('results');
         const productCards = document.getElementById('product-cards');
         const resultsTitle = document.getElementById('results-title');
         const resultsSubtitle = document.getElementById('results-subtitle');
+        const lastUpdated = document.getElementById('last-updated');
+
+        // 데이터 로드 함수
+        async function loadData() {
+            try {
+                loading.classList.add('show');
+                errorMessage.classList.remove('show');
+                
+                const response = await fetch(DATA_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                diaperData = data.products;
+                
+                // 마지막 업데이트 시간 표시
+                if (data.lastUpdated) {
+                    lastUpdated.textContent = new Date(data.lastUpdated).toLocaleDateString('ko-KR');
+                }
+                
+                loadBrands();
+                loading.classList.remove('show');
+                
+            } catch (error) {
+                console.error('데이터 로드 실패:', error);
+                loading.classList.remove('show');
+                errorMessage.classList.add('show');
+                
+                // 폴백: 기본 데이터 사용
+                loadFallbackData();
+            }
+        }
+
+        // 폴백 데이터 (데이터 파일 로드 실패 시 사용)
+        function loadFallbackData() {
+            diaperData = {
+                "하기스": {
+                    "네이처메이드 2024 (팬츠)": [
+                        {
+                            "한박스가격": 35800,
+                            "박스당팩수": 3,
+                            "단계": "1단계",
+                            "팩당개수": 66,
+                            "개당가격": 181
+                        },
+                        {
+                            "한박스가격": 35800,
+                            "박스당팩수": 3,
+                            "단계": "2단계",
+                            "팩당개수": 58,
+                            "개당가격": 206
+                        }
+                    ]
+                },
+                "페미": {
+                    "슈퍼드라이": [
+                        {
+                            "한박스가격": 28000,
+                            "박스당팩수": 4,
+                            "단계": "신생아",
+                            "팩당개수": 30,
+                            "개당가격": 233
+                        }
+                    ]
+                }
+            };
+            
+            loadBrands();
+            errorMessage.classList.remove('show');
+            lastUpdated.textContent = '로컬 데이터 사용 중';
+        }
 
         // 브랜드 옵션 로드
         function loadBrands() {
+            brandSelect.innerHTML = '<option value="">브랜드를 선택하세요</option>';
             Object.keys(diaperData).forEach(brand => {
                 const option = document.createElement('option');
                 option.value = brand;
@@ -418,7 +460,7 @@
             const selectedBrand = this.value;
             productSelect.innerHTML = '<option value="">종류를 선택하세요</option>';
             
-            if (selectedBrand) {
+            if (selectedBrand && diaperData[selectedBrand]) {
                 productSelect.disabled = false;
                 Object.keys(diaperData[selectedBrand]).forEach(product => {
                     const option = document.createElement('option');
@@ -497,8 +539,8 @@
             results.scrollIntoView({ behavior: 'smooth' });
         }
 
-        // 페이지 로드 시 브랜드 옵션 로드
-        document.addEventListener('DOMContentLoaded', loadBrands);
+        // 페이지 로드 시 데이터 로드
+        document.addEventListener('DOMContentLoaded', loadData);
     </script>
 </body>
 </html>
