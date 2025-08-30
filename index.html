@@ -601,9 +601,13 @@ function displayResults(brand, product) {
     // 개당 가격 기준으로 정렬
     const sortedData = [...productData].sort((a, b) => a.개당가격 - b.개당가격);
     
-    sortedData.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = 'product-card';
+ sortedData.forEach((item, index) => {
+    // 👉 여기서 단계 값 확인
+    console.log("단계 값 확인:", item.단계, typeof item.단계);
+
+    const card = document.createElement('div');
+    card.className = 'product-card';
+
 
 // 단계 표시 (숫자 → "단계", 문자 → "사이즈")
 let 단계원본 = (item.단계 || "").trim();
