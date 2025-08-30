@@ -441,7 +441,7 @@
                         종류: values[1],
                         한박스가격: parseInt(values[2]) || 0,
                         박스당팩수: parseInt(values[3]) || 0,
-                        단계: values[4],
+                        단계: String(values[4]).trim() + "단계",
                         팩당개수: parseInt(values[5]) || 0,
                         개당가격: parseFloat(values[6]) || 0
                     });
