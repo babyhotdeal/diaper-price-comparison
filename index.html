@@ -593,6 +593,44 @@ function parseCSV(text) {
         });
 
 // 결과 표시
+<script>
+async function fetchCSV() {
+    const url = "https://docs.google.com/spreadsheets/d/{시트ID}/gviz/tq?tqx=out:csv&sheet={시트이름}";
+    const response = await fetch(url);
+    const text = await response.text();
+    return parseCSV(text);
+}
+
+// CSV → 객체 배열 변환 (정규식 기반 파서)
+function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const result = [];
+
+    for (let i = 1; i < lines.length; i++) {
+        const line = lines[i];
+
+        // 따옴표 포함 안전 파싱
+        const values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g)
+            ?.map(v => v.replace(/^"|"$/g, '').trim()) || [];
+
+        if (values.length >= 7) {
+            result.push({
+                브랜드: values[0],
+                종류: values[1],
+                한박스가격: parseInt(values[2]) || 0,
+                박스당팩수: parseInt(values[3]) || 0,
+                단계: values[4] || "",
+                팩당개수: parseInt(values[5]) || 0,
+                개당가격: parseFloat(values[6]) || 0
+            });
+        } else {
+            console.warn("CSV 파싱 실패:", line, values);
+        }
+    }
+    return result;
+}
+
+// 결과 표시
 function displayResults(brand, product) {
     const productData = diaperData[brand][product];
     
@@ -604,25 +642,24 @@ function displayResults(brand, product) {
     // 개당 가격 기준으로 정렬
     const sortedData = [...productData].sort((a, b) => a.개당가격 - b.개당가격);
     
- sortedData.forEach((item, index) => {
-    // 👉 여기서 단계 값 확인
-    console.log("단계 값 확인:", item.단계, typeof item.단계);
+    sortedData.forEach((item, index) => {
+        // 👉 단계 값 확인 로그
+        console.log("단계 값 확인:", item.단계, typeof item.단계);
 
-    const card = document.createElement('div');
-    card.className = 'product-card';
+        const card = document.createElement('div');
+        card.className = 'product-card';
 
+        // 단계 표시 (숫자 → "단계", 문자 → "사이즈")
+        let 단계원본 = (item.단계 ?? "").toString().trim();
+        let 단계표시;
 
-// 단계 표시 (숫자 → "단계", 문자 → "사이즈")
-let 단계원본 = (item.단계 ?? "").toString().trim();
-let 단계표시;
-
-if (/^\d+$/.test(단계원본)) {
-    단계표시 = `${단계원본}단계`;
-} else if (단계원본.length > 0) {
-    단계표시 = `${단계원본}사이즈`;
-} else {
-    단계표시 = "정보 없음";
-}
+        if (/^\d+$/.test(단계원본)) {
+            단계표시 = `${단계원본}단계`;
+        } else if (단계원본.length > 0) {
+            단계표시 = `${단계원본}사이즈`;
+        } else {
+            단계표시 = "정보 없음";
+        }
 
         card.innerHTML = `
             ${index === 0 ? '<div class="best-deal">최저가!</div>' : ''}
@@ -656,6 +693,27 @@ if (/^\d+$/.test(단계원본)) {
     results.classList.add('show');
     results.scrollIntoView({ behavior: 'smooth' });
 }
+
+// 실행 예시
+fetchCSV().then(data => {
+    // diaperData 라는 전역 객체에 데이터 저장
+    window.diaperData = {};
+    data.forEach(item => {
+        if (!window.diaperData[item.브랜드]) {
+            window.diaperData[item.브랜드] = {};
+        }
+        if (!window.diaperData[item.브랜드][item.종류]) {
+            window.diaperData[item.브랜드][item.종류] = [];
+        }
+        window.diaperData[item.브랜드][item.종류].push(item);
+    });
+
+    // 👉 첫 번째 브랜드/종류 자동 출력 (테스트용)
+    const firstBrand = Object.keys(window.diaperData)[0];
+    const firstProduct = Object.keys(window.diaperData[firstBrand])[0];
+    displayResults(firstBrand, firstProduct);
+});
+</script>
 
         // 페이지 로드 시 데이터 로드
         document.addEventListener('DOMContentLoaded', function() {
