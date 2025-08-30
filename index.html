@@ -426,28 +426,28 @@
         // CSV 파싱 함수
 function parseCSV(text) {
     const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim());
     const result = [];
 
     for (let i = 1; i < lines.length; i++) {
         const line = lines[i];
-        
-        // 따옴표 안 콤마까지 안전하게 split
         const values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g)
             ?.map(v => v.replace(/^"|"$/g, '').trim()) || [];
 
-        if (values.length >= 7) {
-            result.push({
-                브랜드: values[0],
-                종류: values[1],
-                한박스가격: parseInt(values[2]) || 0,
-                박스당팩수: parseInt(values[3]) || 0,
-                단계: values[4] || "",   // ← 여기서 이제 "S", "M", "XL", "JUMBO" 잘 들어옴
-                팩당개수: parseInt(values[5]) || 0,
-                개당가격: parseFloat(values[6]) || 0
-            });
-        } else {
-            console.warn("CSV 파싱 실패:", line, values);
-        }
+        const row = {};
+        headers.forEach((h, idx) => {
+            row[h] = values[idx] ?? "";
+        });
+
+        result.push({
+            브랜드: row["브랜드"] || "",
+            종류: row["종류"] || "",
+            한박스가격: parseInt(row["한박스가격"]) || 0,
+            박스당팩수: parseInt(row["박스당팩수"]) || 0,
+            단계: row["단계"] || "",
+            팩당개수: parseInt(row["팩당개수"]) || 0,
+            개당가격: parseFloat(row["개당가격"]) || 0
+        });
     }
     return result;
 }
