@@ -129,6 +129,21 @@
             display: block;
         }
 
+        .spinner {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .results {
             display: none;
         }
@@ -290,6 +305,22 @@
             text-decoration: underline;
         }
 
+        .refresh-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .refresh-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
         @media (max-width: 768px) {
             .search-form {
                 grid-template-columns: 1fr;
@@ -314,7 +345,7 @@
     <div class="container">
         <div class="header">
             <h1>🍼 기저귀 가격비교</h1>
-            <p>최저가 기저귀를 찾아보세요!</p>
+            <p>최저가 기저귀를 찾아보세요! (구글시트 연동)</p>
         </div>
 
         <div class="search-section">
@@ -336,11 +367,13 @@
         </div>
 
         <div class="loading" id="loading">
-            <p>⏳ 데이터를 불러오는 중...</p>
+            <div class="spinner"></div>
+            <p>📊 구글시트에서 최신 데이터를 불러오는 중...</p>
         </div>
 
         <div class="error-message" id="error-message">
-            <p>❌ 데이터를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.</p>
+            <p>❌ 구글시트에서 데이터를 불러올 수 없습니다.</p>
+            <p>시트가 공개로 설정되어 있는지 확인해주세요.</p>
         </div>
 
         <div class="results" id="results">
@@ -352,14 +385,26 @@
         </div>
 
         <div class="data-source">
-            <p>데이터 출처: <a href="data/diapers.json" target="_blank">diapers.json</a> | 마지막 업데이트: <span id="last-updated">-</span></p>
+            <p>
+                📊 데이터 출처: 
+                <a href="#" id="sheet-link" target="_blank">구글시트</a>
+                <button class="refresh-btn" id="refresh-btn">🔄 새로고침</button>
+            </p>
+            <p>마지막 업데이트: <span id="last-updated">-</span></p>
         </div>
     </div>
 
     <script>
+        // ⚠️ 여기에 본인의 구글시트 ID를 입력하세요!
+        const SHEET_ID = '1imkQ1si-rCEUE0En62TZ4zUOZNcpH9f03EbGrG4kaoM';
+        const SHEET_NAME = 'Sheet1'; // 시트 이름 (기본: Sheet1)
+        
+        // 구글시트 API URL 생성
+        const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}`;
+        const SHEET_VIEW_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`;
+
         // 전역 변수
         let diaperData = {};
-        const DATA_URL = 'data/diapers.json'; // 데이터 파일 경로
 
         // DOM 요소
         const brandSelect = document.getElementById('brand-select');
@@ -372,40 +417,102 @@
         const resultsTitle = document.getElementById('results-title');
         const resultsSubtitle = document.getElementById('results-subtitle');
         const lastUpdated = document.getElementById('last-updated');
+        const sheetLink = document.getElementById('sheet-link');
+        const refreshBtn = document.getElementById('refresh-btn');
 
-        // 데이터 로드 함수
-        async function loadData() {
+        // 구글시트 링크 설정
+        sheetLink.href = SHEET_VIEW_URL;
+
+        // CSV 파싱 함수
+        function parseCSV(text) {
+            const lines = text.trim().split('\n');
+            const result = [];
+            
+            for (let i = 1; i < lines.length; i++) { // 첫 번째 행은 헤더이므로 제외
+                const line = lines[i];
+                // CSV 파싱 (따옴표 처리 포함)
+                const values = line.split(',').map(value => 
+                    value.replace(/^"|"$/g, '').trim()
+                );
+                
+                if (values.length >= 7) {
+                    result.push({
+                        브랜드: values[0],
+                        종류: values[1],
+                        한박스가격: parseInt(values[2]) || 0,
+                        박스당팩수: parseInt(values[3]) || 0,
+                        단계: values[4],
+                        팩당개수: parseInt(values[5]) || 0,
+                        개당가격: parseFloat(values[6]) || 0
+                    });
+                }
+            }
+            
+            return result;
+        }
+
+        // 구글시트 데이터를 구조화된 형태로 변환
+        function structureData(rawData) {
+            const structured = {};
+            
+            rawData.forEach(item => {
+                if (!structured[item.브랜드]) {
+                    structured[item.브랜드] = {};
+                }
+                
+                if (!structured[item.브랜드][item.종류]) {
+                    structured[item.브랜드][item.종류] = [];
+                }
+                
+                structured[item.브랜드][item.종류].push({
+                    한박스가격: item.한박스가격,
+                    박스당팩수: item.박스당팩수,
+                    단계: item.단계,
+                    팩당개수: item.팩당개수,
+                    개당가격: item.개당가격
+                });
+            });
+            
+            return structured;
+        }
+
+        // 구글시트에서 데이터 로드
+        async function loadDataFromSheet() {
             try {
                 loading.classList.add('show');
                 errorMessage.classList.remove('show');
                 
-                const response = await fetch(DATA_URL);
+                const response = await fetch(SHEET_URL);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 
-                const data = await response.json();
-                diaperData = data.products;
+                const csvText = await response.text();
+                const rawData = parseCSV(csvText);
                 
-                // 마지막 업데이트 시간 표시
-                if (data.lastUpdated) {
-                    lastUpdated.textContent = new Date(data.lastUpdated).toLocaleDateString('ko-KR');
+                if (rawData.length === 0) {
+                    throw new Error('데이터가 없습니다.');
                 }
                 
+                diaperData = structureData(rawData);
                 loadBrands();
+                
+                // 마지막 업데이트 시간
+                lastUpdated.textContent = new Date().toLocaleString('ko-KR');
+                
                 loading.classList.remove('show');
                 
             } catch (error) {
-                console.error('데이터 로드 실패:', error);
+                console.error('구글시트 로드 실패:', error);
                 loading.classList.remove('show');
                 errorMessage.classList.add('show');
                 
-                // 폴백: 기본 데이터 사용
+                // 폴백 데이터 사용
                 loadFallbackData();
             }
         }
 
-        // 폴백 데이터 (데이터 파일 로드 실패 시 사용)
+        // 폴백 데이터
         function loadFallbackData() {
             diaperData = {
                 "하기스": {
@@ -425,23 +532,12 @@
                             "개당가격": 206
                         }
                     ]
-                },
-                "페미": {
-                    "슈퍼드라이": [
-                        {
-                            "한박스가격": 28000,
-                            "박스당팩수": 4,
-                            "단계": "신생아",
-                            "팩당개수": 30,
-                            "개당가격": 233
-                        }
-                    ]
                 }
             };
             
             loadBrands();
             errorMessage.classList.remove('show');
-            lastUpdated.textContent = '로컬 데이터 사용 중';
+            lastUpdated.textContent = '샘플 데이터 사용 중';
         }
 
         // 브랜드 옵션 로드
@@ -490,6 +586,11 @@
             }
         });
 
+        // 새로고침 버튼
+        refreshBtn.addEventListener('click', function() {
+            loadDataFromSheet();
+        });
+
         // 결과 표시
         function displayResults(brand, product) {
             const productData = diaperData[brand][product];
@@ -499,7 +600,7 @@
             
             productCards.innerHTML = '';
             
-            // 개당 가격 기준으로 정렬하여 최저가 표시
+            // 개당 가격 기준으로 정렬
             const sortedData = [...productData].sort((a, b) => a.개당가격 - b.개당가격);
             
             sortedData.forEach((item, index) => {
@@ -540,7 +641,17 @@
         }
 
         // 페이지 로드 시 데이터 로드
-        document.addEventListener('DOMContentLoaded', loadData);
+        document.addEventListener('DOMContentLoaded', function() {
+            // SHEET_ID가 설정되지 않았을 때
+            if (SHEET_ID === 'YOUR_GOOGLE_SHEET_ID_HERE') {
+                errorMessage.querySelector('p:first-child').textContent = '❌ 구글시트 ID를 설정해주세요.';
+                errorMessage.querySelector('p:last-child').textContent = '코드에서 SHEET_ID 변수를 수정하세요.';
+                errorMessage.classList.add('show');
+                loadFallbackData();
+            } else {
+                loadDataFromSheet();
+            }
+        });
     </script>
 </body>
 </html>
