@@ -610,12 +610,12 @@ function displayResults(brand, product) {
 
 
 // 단계 표시 (숫자 → "단계", 문자 → "사이즈")
-let 단계원본 = (item.단계 || "").trim();
+let 단계원본 = (item.단계 ?? "").toString().trim();
 let 단계표시;
 
 if (/^\d+$/.test(단계원본)) {
     단계표시 = `${단계원본}단계`;
-} else if (단계원본) {
+} else if (단계원본.length > 0) {
     단계표시 = `${단계원본}사이즈`;
 } else {
     단계표시 = "정보 없음";
