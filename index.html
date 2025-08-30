@@ -435,16 +435,32 @@
                     value.replace(/^"|"$/g, '').trim()
                 );
                 
-                if (values.length >= 7) {
-                    result.push({
-                        브랜드: values[0],
-                        종류: values[1],
-                        한박스가격: parseInt(values[2]) || 0,
-                        박스당팩수: parseInt(values[3]) || 0,
-                        단계: String(values[4]).trim() + "단계",
-                        팩당개수: parseInt(values[5]) || 0,
-                        개당가격: parseFloat(values[6]) || 0
-                    });
+              if (values.length >= 7) {
+  const stageOrSize = values[4];
+  let 단계표시;
+
+  // 영문일 경우 (예: S, M, L, XL)
+  if (/^[a-zA-Z]+$/.test(stageOrSize)) {
+    단계표시 = stageOrSize + "사이즈";
+  }
+  // 숫자일 경우 (예: 1, 2, 3)
+  else if (/^\d+$/.test(stageOrSize)) {
+    단계표시 = stageOrSize + "단계";
+  }
+  // 그 외 값은 그대로
+  else {
+    단계표시 = stageOrSize;
+  }
+
+  result.push({
+    브랜드: values[0],
+    종류: values[1],
+    한박스가격: parseInt(values[2]) || 0,
+    박스당팩수: parseInt(values[3]) || 0,
+    단계: 단계표시,
+    팩당개수: parseInt(values[5]) || 0,
+    개당가격: parseFloat(values[6]) || 0
+  });
                 }
             }
             
