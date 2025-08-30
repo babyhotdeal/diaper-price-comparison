@@ -607,13 +607,17 @@ function displayResults(brand, product) {
         const card = document.createElement('div');
         card.className = 'product-card';
 
-        // 단계 표시 (숫자 → "단계", 문자 → "사이즈")
-        let 단계표시;
-        if (/^\d+$/.test(item.단계)) {  
-            단계표시 = `${item.단계}단계`;
-        } else {
-            단계표시 = `${item.단계}사이즈`;
-        }
+// 단계 표시 (숫자 → "단계", 문자 → "사이즈")
+let 단계원본 = (item.단계 || "").trim();
+let 단계표시;
+
+if (/^\d+$/.test(단계원본)) {
+    단계표시 = `${단계원본}단계`;
+} else if (단계원본) {
+    단계표시 = `${단계원본}사이즈`;
+} else {
+    단계표시 = "정보 없음";
+}
 
         card.innerHTML = `
             ${index === 0 ? '<div class="best-deal">최저가!</div>' : ''}
