@@ -424,32 +424,30 @@
         sheetLink.href = SHEET_VIEW_URL;
 
         // CSV 파싱 함수
-        function parseCSV(text) {
-            const lines = text.trim().split('\n');
-            const result = [];
-            
-            for (let i = 1; i < lines.length; i++) { // 첫 번째 행은 헤더이므로 제외
-                const line = lines[i];
-                // CSV 파싱 (따옴표 처리 포함)
-                const values = line.split(',').map(value => 
-                    value.replace(/^"|"$/g, '').trim()
-                );
-                
-                if (values.length >= 7) {
-                    result.push({
-                        브랜드: values[0],
-                        종류: values[1],
-                        한박스가격: parseInt(values[2]) || 0,
-                        박스당팩수: parseInt(values[3]) || 0,
-                        단계: values[4],
-                        팩당개수: parseInt(values[5]) || 0,
-                        개당가격: parseFloat(values[6]) || 0
-                    });
-                }
-            }
-            
-            return result;
+function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const result = [];
+
+    for (let i = 1; i < lines.length; i++) { // 첫 번째 행은 헤더 제외
+        const line = lines[i];
+        // CSV 안전 파싱 (따옴표 안 콤마도 허용)
+        const values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g)
+            ?.map(v => v.replace(/^"|"$/g, '').trim()) || [];
+
+        if (values.length >= 7) {
+            result.push({
+                브랜드: values[0],
+                종류: values[1],
+                한박스가격: parseInt(values[2]) || 0,
+                박스당팩수: parseInt(values[3]) || 0,
+                단계: values[4] || "",   // 값 없으면 빈 문자열
+                팩당개수: parseInt(values[5]) || 0,
+                개당가격: parseFloat(values[6]) || 0
+            });
         }
+    }
+    return result;
+}
 
         // 구글시트 데이터를 구조화된 형태로 변환
         function structureData(rawData) {
