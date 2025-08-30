@@ -396,7 +396,7 @@
 
     <script>
         // ⚠️ 여기에 본인의 구글시트 ID를 입력하세요!
-        const SHEET_ID = '1imkQ1si-rCEUE0En62TZ4zUOZNcpH9f03EbGrG4kaoM';
+        const SHEET_ID = 'YOUR_GOOGLE_SHEET_ID_HERE';
         const SHEET_NAME = 'Sheet1'; // 시트 이름 (기본: Sheet1)
         
         // 구글시트 API URL 생성
@@ -435,32 +435,16 @@
                     value.replace(/^"|"$/g, '').trim()
                 );
                 
-              if (values.length >= 7) {
-  const stageOrSize = values[4];
-  let 단계표시;
-
-  // 영문일 경우 (예: S, M, L, XL)
-  if (/^[a-zA-Z]+$/.test(stageOrSize)) {
-    단계표시 = stageOrSize + "사이즈";
-  }
-  // 숫자일 경우 (예: 1, 2, 3)
-  else if (/^\d+$/.test(stageOrSize)) {
-    단계표시 = stageOrSize + "단계";
-  }
-  // 그 외 값은 그대로
-  else {
-    단계표시 = stageOrSize;
-  }
-
-  result.push({
-    브랜드: values[0],
-    종류: values[1],
-    한박스가격: parseInt(values[2]) || 0,
-    박스당팩수: parseInt(values[3]) || 0,
-    단계: 단계표시,
-    팩당개수: parseInt(values[5]) || 0,
-    개당가격: parseFloat(values[6]) || 0
-  });
+                if (values.length >= 7) {
+                    result.push({
+                        브랜드: values[0],
+                        종류: values[1],
+                        한박스가격: parseInt(values[2]) || 0,
+                        박스당팩수: parseInt(values[3]) || 0,
+                        단계: values[4],
+                        팩당개수: parseInt(values[5]) || 0,
+                        개당가격: parseFloat(values[6]) || 0
+                    });
                 }
             }
             
@@ -483,7 +467,7 @@
                 structured[item.브랜드][item.종류].push({
                     한박스가격: item.한박스가격,
                     박스당팩수: item.박스당팩수,
-                    단계: item.단계
+                    단계: item.단계,
                     팩당개수: item.팩당개수,
                     개당가격: item.개당가격
                 });
