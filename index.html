@@ -430,7 +430,8 @@ function parseCSV(text) {
 
     for (let i = 1; i < lines.length; i++) {
         const line = lines[i];
-        // 콤마 기준 split, 따옴표 안의 콤마도 허용
+        
+        // 따옴표 안 콤마까지 안전하게 split
         const values = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g)
             ?.map(v => v.replace(/^"|"$/g, '').trim()) || [];
 
@@ -440,7 +441,7 @@ function parseCSV(text) {
                 종류: values[1],
                 한박스가격: parseInt(values[2]) || 0,
                 박스당팩수: parseInt(values[3]) || 0,
-                단계: values[4] || "",   // 👈 이제 여기 "S", "M", "XL" 등 들어감
+                단계: values[4] || "",   // ← 여기서 이제 "S", "M", "XL", "JUMBO" 잘 들어옴
                 팩당개수: parseInt(values[5]) || 0,
                 개당가격: parseFloat(values[6]) || 0
             });
