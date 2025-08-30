@@ -592,53 +592,61 @@
         });
 
         // 결과 표시
-        function displayResults(brand, product) {
-            const productData = diaperData[brand][product];
-            
-            resultsTitle.textContent = `${brand} - ${product}`;
-            resultsSubtitle.textContent = `${productData.length}개의 옵션을 찾았습니다`;
-            
-            productCards.innerHTML = '';
-            
-            // 개당 가격 기준으로 정렬
-            const sortedData = [...productData].sort((a, b) => a.개당가격 - b.개당가격);
-            
-            sortedData.forEach((item, index) => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                
-                card.innerHTML = `
-                    ${index === 0 ? '<div class="best-deal">최저가!</div>' : ''}
-                    <div class="product-header">
-                        <div class="product-title">${item.단계}</div>
-                        <div class="price-badge">₩${item.개당가격.toLocaleString()}/개</div>
-                    </div>
-                    <div class="product-details">
-                        <div class="detail-item">
-                            <div class="detail-label">한 박스 가격</div>
-                            <div class="detail-value">₩${item.한박스가격.toLocaleString()}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">박스당 팩 수</div>
-                            <div class="detail-value">${item.박스당팩수}팩</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">팩당 개수</div>
-                            <div class="detail-value">${item.팩당개수}개</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">총 개수</div>
-                            <div class="detail-value">${item.박스당팩수 * item.팩당개수}개</div>
-                        </div>
-                    </div>
-                `;
-                
-                productCards.appendChild(card);
-            });
-            
-            results.classList.add('show');
-            results.scrollIntoView({ behavior: 'smooth' });
+function displayResults(brand, product) {
+    const productData = diaperData[brand][product];
+    
+    resultsTitle.textContent = `${brand} - ${product}`;
+    resultsSubtitle.textContent = `${productData.length}개의 옵션을 찾았습니다`;
+    
+    productCards.innerHTML = '';
+    
+    // 개당 가격 기준으로 정렬
+    const sortedData = [...productData].sort((a, b) => a.개당가격 - b.개당가격);
+    
+    sortedData.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+
+        // 단계 표시 (숫자 → "단계", 문자 → "사이즈")
+        let 단계표시;
+        if (/^\d+$/.test(item.단계)) {  
+            단계표시 = `${item.단계}단계`;
+        } else {
+            단계표시 = `${item.단계}사이즈`;
         }
+
+        card.innerHTML = `
+            ${index === 0 ? '<div class="best-deal">최저가!</div>' : ''}
+            <div class="product-header">
+                <div class="product-title">${단계표시}</div>
+                <div class="price-badge">₩${item.개당가격.toLocaleString()}/개</div>
+            </div>
+            <div class="product-details">
+                <div class="detail-item">
+                    <div class="detail-label">한 박스 가격</div>
+                    <div class="detail-value">₩${item.한박스가격.toLocaleString()}</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">박스당 팩 수</div>
+                    <div class="detail-value">${item.박스당팩수}팩</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">팩당 개수</div>
+                    <div class="detail-value">${item.팩당개수}개</div>
+                </div>
+                <div class="detail-item">
+                    <div class="detail-label">총 개수</div>
+                    <div class="detail-value">${item.박스당팩수 * item.팩당개수}개</div>
+                </div>
+            </div>
+        `;
+        
+        productCards.appendChild(card);
+    });
+    
+    results.classList.add('show');
+    results.scrollIntoView({ behavior: 'smooth' });
+}
 
         // 페이지 로드 시 데이터 로드
         document.addEventListener('DOMContentLoaded', function() {
