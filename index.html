@@ -341,158 +341,6 @@
             }
         }
     </style>
-    <script>
-// 기저귀 사이즈 표시 수정 함수
-function fixDiaperSizeDisplay() {
-    // 모든 텍스트 노드와 요소를 검색하여 사이즈 표기를 수정
-    function processTextNodes(element) {
-        const walker = document.createTreeWalker(
-            element,
-            NodeFilter.SHOW_TEXT,
-            null,
-            false
-        );
-
-        const textNodes = [];
-        let node;
-        
-        while (node = walker.nextNode()) {
-            textNodes.push(node);
-        }
-
-        textNodes.forEach(textNode => {
-            let text = textNode.textContent;
-            let modified = false;
-
-            // 숫자 단계 처리 (1, 2, 3, 4, 5 등)
-            text = text.replace(/\b(\d+)(?!\s*단계)(?=\s|$|,|\.)/g, (match, number) => {
-                modified = true;
-                return number + '단계';
-            });
-
-            // 영문 사이즈 처리 (S, M, L, XL 등)
-            text = text.replace(/\b([SMXL]+)(?!\s*사이즈)(?=\s|$|,|\.)/gi, (match, size) => {
-                if (!size.match(/^\d/)) {
-                    modified = true;
-                    return size + '사이즈';
-                }
-                return match;
-            });
-
-            if (modified) {
-                textNode.textContent = text;
-            }
-        });
-    }
-
-    // 특정 요소들의 속성값도 수정
-    function processElementAttributes() {
-        const elementsWithAttributes = document.querySelectorAll('[value], [title], [placeholder], [alt]');
-        
-        elementsWithAttributes.forEach(element => {
-            ['value', 'title', 'placeholder', 'alt'].forEach(attr => {
-                if (element.hasAttribute(attr)) {
-                    let value = element.getAttribute(attr);
-                    let originalValue = value;
-
-                    // 숫자 단계 처리
-                    value = value.replace(/\b(\d+)(?!\s*단계)(?=\s|$|,|\.)/g, '$1단계');
-
-                    // 영문 사이즈 처리
-                    value = value.replace(/\b([SMXL]+)(?!\s*사이즈)(?=\s|$|,|\.)/gi, (match, size) => {
-                        if (!size.match(/^\d/)) {
-                            return size + '사이즈';
-                        }
-                        return match;
-                    });
-
-                    if (value !== originalValue) {
-                        element.setAttribute(attr, value);
-                    }
-                }
-            });
-        });
-    }
-
-    // 전체 문서 처리
-    processTextNodes(document.body);
-    processElementAttributes();
-}
-
-// DOM이 로드된 후 실행
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', fixDiaperSizeDisplay);
-} else {
-    fixDiaperSizeDisplay();
-}
-
-// 동적으로 추가되는 콘텐츠를 위한 MutationObserver 설정
-const observer = new MutationObserver(function(mutations) {
-    mutations.forEach(function(mutation) {
-        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
-            mutation.addedNodes.forEach(function(node) {
-                if (node.nodeType === Node.ELEMENT_NODE) {
-                    const walker = document.createTreeWalker(
-                        node,
-                        NodeFilter.SHOW_TEXT,
-                        null,
-                        false
-                    );
-
-                    const textNodes = [];
-                    let textNode;
-                    
-                    while (textNode = walker.nextNode()) {
-                        textNodes.push(textNode);
-                    }
-
-                    textNodes.forEach(textNode => {
-                        let text = textNode.textContent;
-                        let modified = false;
-
-                        // 숫자 단계 처리
-                        text = text.replace(/\b(\d+)(?!\s*단계)(?=\s|$|,|\.)/g, (match, number) => {
-                            modified = true;
-                            return number + '단계';
-                        });
-
-                        // 영문 사이즈 처리
-                        text = text.replace(/\b([SMXL]+)(?!\s*사이즈)(?=\s|$|,|\.)/gi, (match, size) => {
-                            if (!size.match(/^\d/)) {
-                                modified = true;
-                                return size + '사이즈';
-                            }
-                            return match;
-                        });
-
-                        if (modified) {
-                            textNode.textContent = text;
-                        }
-                    });
-                }
-            });
-        }
-    });
-});
-
-// 문서의 변화를 관찰 시작
-observer.observe(document.body, {
-    childList: true,
-    subtree: true
-});
-
-// 페이지에서 AJAX나 fetch로 데이터를 불러올 때를 대비한 주기적 체크
-let checkInterval = setInterval(() => {
-    fixDiaperSizeDisplay();
-}, 2000);
-
-// 10초 후 주기적 체크 중단 (성능 최적화)
-setTimeout(() => {
-    clearInterval(checkInterval);
-}, 10000);
-
-console.log('기저귀 사이즈 표시 수정 스크립트가 활성화되었습니다.');
-</script>
 </head>
 <body>
     <div class="container">
@@ -805,6 +653,156 @@ console.log('기저귀 사이즈 표시 수정 스크립트가 활성화되었�
                 loadDataFromSheet();
             }
         });
+// 기저귀 사이즈 표시 수정 함수
+function fixDiaperSizeDisplay() {
+    // 모든 텍스트 노드와 요소를 검색하여 사이즈 표기를 수정
+    function processTextNodes(element) {
+        const walker = document.createTreeWalker(
+            element,
+            NodeFilter.SHOW_TEXT,
+            null,
+            false
+        );
+
+        const textNodes = [];
+        let node;
+        
+        while (node = walker.nextNode()) {
+            textNodes.push(node);
+        }
+
+        textNodes.forEach(textNode => {
+            let text = textNode.textContent;
+            let modified = false;
+
+            // 숫자 단계 처리 (1, 2, 3, 4, 5 등)
+            text = text.replace(/\b(\d+)(?!\s*단계)(?=\s|$|,|\.)/g, (match, number) => {
+                modified = true;
+                return number + '단계';
+            });
+
+            // 영문 사이즈 처리 (S, M, L, XL 등)
+            text = text.replace(/\b([SMXL]+)(?!\s*사이즈)(?=\s|$|,|\.)/gi, (match, size) => {
+                if (!size.match(/^\d/)) {
+                    modified = true;
+                    return size + '사이즈';
+                }
+                return match;
+            });
+
+            if (modified) {
+                textNode.textContent = text;
+            }
+        });
+    }
+
+    // 특정 요소들의 속성값도 수정
+    function processElementAttributes() {
+        const elementsWithAttributes = document.querySelectorAll('[value], [title], [placeholder], [alt]');
+        
+        elementsWithAttributes.forEach(element => {
+            ['value', 'title', 'placeholder', 'alt'].forEach(attr => {
+                if (element.hasAttribute(attr)) {
+                    let value = element.getAttribute(attr);
+                    let originalValue = value;
+
+                    // 숫자 단계 처리
+                    value = value.replace(/\b(\d+)(?!\s*단계)(?=\s|$|,|\.)/g, '$1단계');
+
+                    // 영문 사이즈 처리
+                    value = value.replace(/\b([SMXL]+)(?!\s*사이즈)(?=\s|$|,|\.)/gi, (match, size) => {
+                        if (!size.match(/^\d/)) {
+                            return size + '사이즈';
+                        }
+                        return match;
+                    });
+
+                    if (value !== originalValue) {
+                        element.setAttribute(attr, value);
+                    }
+                }
+            });
+        });
+    }
+
+    // 전체 문서 처리
+    processTextNodes(document.body);
+    processElementAttributes();
+}
+
+// DOM이 로드된 후 실행
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fixDiaperSizeDisplay);
+} else {
+    fixDiaperSizeDisplay();
+}
+
+// 동적으로 추가되는 콘텐츠를 위한 MutationObserver 설정
+const observer = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+            mutation.addedNodes.forEach(function(node) {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                    const walker = document.createTreeWalker(
+                        node,
+                        NodeFilter.SHOW_TEXT,
+                        null,
+                        false
+                    );
+
+                    const textNodes = [];
+                    let textNode;
+                    
+                    while (textNode = walker.nextNode()) {
+                        textNodes.push(textNode);
+                    }
+
+                    textNodes.forEach(textNode => {
+                        let text = textNode.textContent;
+                        let modified = false;
+
+                        // 숫자 단계 처리
+                        text = text.replace(/\b(\d+)(?!\s*단계)(?=\s|$|,|\.)/g, (match, number) => {
+                            modified = true;
+                            return number + '단계';
+                        });
+
+                        // 영문 사이즈 처리
+                        text = text.replace(/\b([SMXL]+)(?!\s*사이즈)(?=\s|$|,|\.)/gi, (match, size) => {
+                            if (!size.match(/^\d/)) {
+                                modified = true;
+                                return size + '사이즈';
+                            }
+                            return match;
+                        });
+
+                        if (modified) {
+                            textNode.textContent = text;
+                        }
+                    });
+                }
+            });
+        }
+    });
+});
+
+// 문서의 변화를 관찰 시작
+observer.observe(document.body, {
+    childList: true,
+    subtree: true
+});
+
+// 페이지에서 AJAX나 fetch로 데이터를 불러올 때를 대비한 주기적 체크
+let checkInterval = setInterval(() => {
+    fixDiaperSizeDisplay();
+}, 2000);
+
+// 10초 후 주기적 체크 중단 (성능 최적화)
+setTimeout(() => {
+    clearInterval(checkInterval);
+}, 10000);
+
+console.log('기저귀 사이즈 표시 수정 스크립트가 활성화되었습니다.');
     </script>
 </body>
 </html>
