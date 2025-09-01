@@ -10,329 +10,221 @@
             padding: 0;
             box-sizing: border-box;
         }
-
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-
+        
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
-
+        
         .header {
             text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .header h1 {
             color: white;
-            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
-
+        
         .header p {
-            color: rgba(255,255,255,0.9);
-            font-size: 1.1em;
+            font-size: 1.1rem;
+            opacity: 0.9;
         }
-
+        
         .search-section {
             background: white;
             border-radius: 20px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-
+        
         .search-form {
             display: grid;
             grid-template-columns: 1fr 1fr auto;
             gap: 20px;
             align-items: end;
         }
-
+        
         .form-group {
             display: flex;
             flex-direction: column;
         }
-
+        
         .form-group label {
-            font-weight: 600;
             margin-bottom: 8px;
+            font-weight: 600;
             color: #333;
-            font-size: 1.1em;
         }
-
+        
         .form-group select {
             padding: 12px 15px;
             border: 2px solid #e1e5e9;
-            border-radius: 12px;
-            font-size: 1em;
+            border-radius: 10px;
+            font-size: 16px;
             background: white;
-            transition: all 0.3s ease;
-            cursor: pointer;
+            transition: border-color 0.3s;
         }
-
+        
         .form-group select:focus {
             outline: none;
             border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
-
-        .form-group select:disabled {
-            background: #f8f9fa;
-            cursor: not-allowed;
-            opacity: 0.6;
-        }
-
+        
         .search-btn {
-            padding: 12px 30px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 1.1em;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            transform: translateY(0);
+            transition: transform 0.2s;
+            height: fit-content;
         }
-
+        
         .search-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
-
-        .search-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .loading {
-            display: none;
-            text-align: center;
-            color: white;
-            font-size: 1.2em;
-            padding: 20px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
-        }
-
-        .loading.show {
-            display: block;
-        }
-
-        .spinner {
-            border: 3px solid rgba(255,255,255,0.3);
-            border-radius: 50%;
-            border-top: 3px solid white;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto 10px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .results {
+        
+        .results-section {
             display: none;
         }
-
-        .results.show {
-            display: block;
-        }
-
-        .results-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .results-header h2 {
-            color: white;
-            font-size: 2em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-
-        .results-header p {
-            color: rgba(255,255,255,0.9);
-            font-size: 1.1em;
-        }
-
-        .product-cards {
+        
+        .results-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
         }
-
+        
         .product-card {
             background: white;
-            border-radius: 20px;
+            border-radius: 15px;
             padding: 25px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
         }
-
-        .product-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
+        
         .product-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
         }
-
+        
         .product-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 2px solid #f8f9fa;
+            border-bottom: 2px solid #f0f0f0;
         }
-
-        .product-title {
-            font-size: 1.3em;
-            font-weight: 700;
-            color: #333;
-        }
-
-        .price-badge {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 8px 16px;
-            border-radius: 25px;
+        
+        .product-brand {
+            font-size: 1.1rem;
             font-weight: 600;
-            font-size: 0.9em;
+            color: #667eea;
+            margin-bottom: 5px;
         }
-
+        
+        .product-type {
+            font-size: 1rem;
+            color: #666;
+        }
+        
         .product-details {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
+            margin-bottom: 20px;
         }
-
+        
         .detail-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
             text-align: center;
-            padding: 15px;
+            padding: 10px;
             background: #f8f9fa;
-            border-radius: 12px;
-            transition: all 0.3s ease;
+            border-radius: 8px;
         }
-
-        .detail-item:hover {
-            background: #e9ecef;
-            transform: scale(1.02);
-        }
-
+        
         .detail-label {
-            font-size: 0.9em;
+            font-size: 0.9rem;
             color: #666;
-            margin-bottom: 8px;
-            font-weight: 500;
+            margin-bottom: 5px;
         }
-
+        
         .detail-value {
-            font-size: 1.2em;
-            font-weight: 700;
+            font-size: 1.1rem;
+            font-weight: 600;
             color: #333;
         }
-
-        .best-deal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #ff6b6b;
+        
+        .price-highlight {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8em;
-            font-weight: 600;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-
-        .error-message {
-            display: none;
+            border-radius: 10px;
+            padding: 15px;
             text-align: center;
-            color: #ff6b6b;
-            font-size: 1.2em;
-            padding: 20px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .price-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        
+        .info-btn {
+            width: 100%;
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .info-btn:hover {
+            background: #218838;
+        }
+        
+        .info-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
             margin: 20px 0;
         }
-
-        .error-message.show {
-            display: block;
-        }
-
-        .data-source {
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
             text-align: center;
-            margin-top: 30px;
-            color: rgba(255,255,255,0.7);
-            font-size: 0.9em;
         }
-
-        .data-source a {
-            color: rgba(255,255,255,0.9);
-            text-decoration: underline;
-        }
-
-        .refresh-btn {
-            background: rgba(255,255,255,0.2);
-            color: white;
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 20px;
-            padding: 8px 16px;
-            font-size: 0.9em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-left: 10px;
-        }
-
-        .refresh-btn:hover {
-            background: rgba(255,255,255,0.3);
-        }
-
+        
         @media (max-width: 768px) {
             .search-form {
-                grid-template-columns: 1fr;
-                gap: 15px;
-            }
-            
-            .product-cards {
                 grid-template-columns: 1fr;
             }
             
             .header h1 {
-                font-size: 2em;
+                font-size: 2rem;
             }
             
             .product-details {
@@ -344,314 +236,231 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🍼 기저귀 가격비교</h1>
+            <h1>
+                🏷️ 기저귀 가격비교
+            </h1>
             <p>최저가 기저귀를 찾아보세요! (구글시트 연동)</p>
         </div>
-
+        
         <div class="search-section">
             <div class="search-form">
                 <div class="form-group">
-                    <label for="brand-select">브랜드 선택</label>
-                    <select id="brand-select">
+                    <label for="brand">브랜드 선택</label>
+                    <select id="brand">
                         <option value="">브랜드를 선택하세요</option>
                     </select>
                 </div>
+                
                 <div class="form-group">
-                    <label for="product-select">종류 선택</label>
-                    <select id="product-select" disabled>
-                        <option value="">먼저 브랜드를 선택하세요</option>
+                    <label for="type">종류 선택</label>
+                    <select id="type" disabled>
+                        <option value="">종류를 선택하세요</option>
                     </select>
                 </div>
-                <button class="search-btn" id="search-btn" disabled>제품 검색</button>
+                
+                <button class="search-btn" onclick="searchProducts()">제품 검색</button>
             </div>
         </div>
-
-        <div class="loading" id="loading">
-            <div class="spinner"></div>
-            <p>📊 구글시트에서 최신 데이터를 불러오는 중...</p>
+        
+        <div id="loading" class="loading" style="display: none;">
+            데이터를 불러오는 중...
         </div>
-
-        <div class="error-message" id="error-message">
-            <p>❌ 구글시트에서 데이터를 불러올 수 없습니다.</p>
-            <p>시트가 공개로 설정되어 있는지 확인해주세요.</p>
+        
+        <div id="error" class="error" style="display: none;">
+            데이터를 불러오는데 실패했습니다. 다시 시도해주세요.
         </div>
-
-        <div class="results" id="results">
-            <div class="results-header">
-                <h2 id="results-title">검색 결과</h2>
-                <p id="results-subtitle">찾으시는 제품의 상세 정보입니다</p>
+        
+        <div id="results" class="results-section">
+            <div class="results-grid" id="resultsGrid">
             </div>
-            <div class="product-cards" id="product-cards"></div>
-        </div>
-
-        <div class="data-source">
-            <p>
-                📊 데이터 출처: 
-                <a href="#" id="sheet-link" target="_blank">구글시트</a>
-                <button class="refresh-btn" id="refresh-btn">🔄 새로고침</button>
-            </p>
-            <p>마지막 업데이트: <span id="last-updated">-</span></p>
         </div>
     </div>
 
     <script>
-        // ⚠️ 여기에 본인의 구글시트 ID를 입력하세요!
-        const SHEET_ID = '1imkQ1si-rCEUE0En62TZ4zUOZNcpH9f03EbGrG4kaoM';
-        const SHEET_NAME = 'Sheet1'; // 시트 이름 (기본: Sheet1)
+        let spreadsheetData = [];
+        const SPREADSHEET_ID = '1imkQ1si-rCEUE0En62TZ4zUOZNcpH9f03EbGrG4kaoM';
+        const API_KEY = 'AIzaSyD-9tWuuikRBtchfHgMZt7IlFmJyuLX8pI'; // 공개 API 키 (실제 사용시 보안 필요)
         
-        // 구글시트 API URL 생성
-        const SHEET_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}`;
-        const SHEET_VIEW_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit`;
-
-        // 전역 변수
-        let diaperData = {};
-
-        // DOM 요소
-        const brandSelect = document.getElementById('brand-select');
-        const productSelect = document.getElementById('product-select');
-        const searchBtn = document.getElementById('search-btn');
-        const loading = document.getElementById('loading');
-        const errorMessage = document.getElementById('error-message');
-        const results = document.getElementById('results');
-        const productCards = document.getElementById('product-cards');
-        const resultsTitle = document.getElementById('results-title');
-        const resultsSubtitle = document.getElementById('results-subtitle');
-        const lastUpdated = document.getElementById('last-updated');
-        const sheetLink = document.getElementById('sheet-link');
-        const refreshBtn = document.getElementById('refresh-btn');
-
-        // 구글시트 링크 설정
-        sheetLink.href = SHEET_VIEW_URL;
-
-        // CSV 파싱 함수
-        function parseCSV(text) {
-            const lines = text.trim().split('\n');
-            const result = [];
+        // 데이터 로드
+        async function loadSpreadsheetData() {
+            const loading = document.getElementById('loading');
+            const error = document.getElementById('error');
             
-            for (let i = 1; i < lines.length; i++) { // 첫 번째 행은 헤더이므로 제외
-                const line = lines[i];
-                // CSV 파싱 (따옴표 처리 포함)
-                const values = line.split(',').map(value => 
-                    value.replace(/^"|"$/g, '').trim()
-                );
-                
-                if (values.length >= 7) {
-                    result.push({
-                        브랜드: values[0],
-                        종류: values[1],
-                        한박스가격: parseInt(values[2]) || 0,
-                        박스당팩수: parseInt(values[3]) || 0,
-                        단계: values[4],
-                        팩당개수: parseInt(values[5]) || 0,
-                        개당가격: parseFloat(values[6]) || 0
-                    });
-                }
-            }
-            
-            return result;
-        }
-
-        // 구글시트 데이터를 구조화된 형태로 변환
-        function structureData(rawData) {
-            const structured = {};
-            
-            rawData.forEach(item => {
-                if (!structured[item.브랜드]) {
-                    structured[item.브랜드] = {};
-                }
-                
-                if (!structured[item.브랜드][item.종류]) {
-                    structured[item.브랜드][item.종류] = [];
-                }
-                
-                structured[item.브랜드][item.종류].push({
-                    한박스가격: item.한박스가격,
-                    박스당팩수: item.박스당팩수,
-                    단계: item.단계,
-                    팩당개수: item.팩당개수,
-                    개당가격: item.개당가격
-                });
-            });
-            
-            return structured;
-        }
-
-        // 구글시트에서 데이터 로드
-        async function loadDataFromSheet() {
             try {
-                loading.classList.add('show');
-                errorMessage.classList.remove('show');
+                loading.style.display = 'block';
+                error.style.display = 'none';
                 
-                const response = await fetch(SHEET_URL);
+                const response = await fetch(`https://sheets.googleapis.com/v4/spreadsheets/${SPREADSHEET_ID}/values/Sheet1?key=${API_KEY}`);
+                
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    throw new Error('API 요청 실패');
                 }
                 
-                const csvText = await response.text();
-                const rawData = parseCSV(csvText);
+                const data = await response.json();
+                const rows = data.values;
                 
-                if (rawData.length === 0) {
-                    throw new Error('데이터가 없습니다.');
+                if (!rows || rows.length < 2) {
+                    throw new Error('데이터가 없습니다');
                 }
                 
-                diaperData = structureData(rawData);
-                loadBrands();
+                // 헤더를 제외한 데이터 파싱
+                const headers = rows[0];
+                spreadsheetData = rows.slice(1).map(row => {
+                    const obj = {};
+                    headers.forEach((header, index) => {
+                        obj[header] = row[index] || '';
+                    });
+                    return obj;
+                });
                 
-                // 마지막 업데이트 시간
-                lastUpdated.textContent = new Date().toLocaleString('ko-KR');
+                populateBrands();
+                loading.style.display = 'none';
                 
-                loading.classList.remove('show');
-                
-            } catch (error) {
-                console.error('구글시트 로드 실패:', error);
-                loading.classList.remove('show');
-                errorMessage.classList.add('show');
-                
-                // 폴백 데이터 사용
-                loadFallbackData();
+            } catch (err) {
+                console.error('데이터 로드 실패:', err);
+                loading.style.display = 'none';
+                error.style.display = 'block';
             }
         }
-
-        // 폴백 데이터
-        function loadFallbackData() {
-            diaperData = {
-                "하기스": {
-                    "네이처메이드 2024 (팬츠)": [
-                        {
-                            "한박스가격": 35800,
-                            "박스당팩수": 3,
-                            "단계": "1단계",
-                            "팩당개수": 66,
-                            "개당가격": 181
-                        },
-                        {
-                            "한박스가격": 35800,
-                            "박스당팩수": 3,
-                            "단계": "2단계",
-                            "팩당개수": 58,
-                            "개당가격": 206
-                        }
-                    ]
-                }
-            };
+        
+        // 브랜드 옵션 채우기
+        function populateBrands() {
+            const brandSelect = document.getElementById('brand');
+            const brands = [...new Set(spreadsheetData.map(item => item['브랜드']).filter(brand => brand))];
             
-            loadBrands();
-            errorMessage.classList.remove('show');
-            lastUpdated.textContent = '샘플 데이터 사용 중';
-        }
-
-        // 브랜드 옵션 로드
-        function loadBrands() {
             brandSelect.innerHTML = '<option value="">브랜드를 선택하세요</option>';
-            Object.keys(diaperData).forEach(brand => {
+            brands.forEach(brand => {
                 const option = document.createElement('option');
                 option.value = brand;
                 option.textContent = brand;
                 brandSelect.appendChild(option);
             });
         }
-
-        // 브랜드 선택 시 제품 옵션 로드
-        brandSelect.addEventListener('change', function() {
+        
+        // 브랜드 선택시 종류 업데이트
+        document.getElementById('brand').addEventListener('change', function() {
             const selectedBrand = this.value;
-            productSelect.innerHTML = '<option value="">종류를 선택하세요</option>';
+            const typeSelect = document.getElementById('type');
             
-            if (selectedBrand && diaperData[selectedBrand]) {
-                productSelect.disabled = false;
-                Object.keys(diaperData[selectedBrand]).forEach(product => {
-                    const option = document.createElement('option');
-                    option.value = product;
-                    option.textContent = product;
-                    productSelect.appendChild(option);
-                });
-            } else {
-                productSelect.disabled = true;
-                productSelect.innerHTML = '<option value="">먼저 브랜드를 선택하세요</option>';
-                searchBtn.disabled = true;
+            if (!selectedBrand) {
+                typeSelect.disabled = true;
+                typeSelect.innerHTML = '<option value="">종류를 선택하세요</option>';
+                return;
             }
-        });
-
-        // 제품 선택 시 검색 버튼 활성화
-        productSelect.addEventListener('change', function() {
-            searchBtn.disabled = !this.value;
-        });
-
-        // 검색 버튼 클릭
-        searchBtn.addEventListener('click', function() {
-            const selectedBrand = brandSelect.value;
-            const selectedProduct = productSelect.value;
             
-            if (selectedBrand && selectedProduct) {
-                displayResults(selectedBrand, selectedProduct);
-            }
-        });
-
-        // 새로고침 버튼
-        refreshBtn.addEventListener('click', function() {
-            loadDataFromSheet();
-        });
-
-        // 결과 표시
-        function displayResults(brand, product) {
-            const productData = diaperData[brand][product];
+            const types = [...new Set(spreadsheetData
+                .filter(item => item['브랜드'] === selectedBrand)
+                .map(item => item['종류'])
+                .filter(type => type))];
             
-            resultsTitle.textContent = `${brand} - ${product}`;
-            resultsSubtitle.textContent = `${productData.length}개의 옵션을 찾았습니다`;
-            
-            productCards.innerHTML = '';
-            
-            // 개당 가격 기준으로 정렬
-            const sortedData = [...productData].sort((a, b) => a.개당가격 - b.개당가격);
-            
-            sortedData.forEach((item, index) => {
-                const card = document.createElement('div');
-                card.className = 'product-card';
-                
-                card.innerHTML = `
-                    ${index === 0 ? '<div class="best-deal">최저가!</div>' : ''}
-                    <div class="product-header">
-                        <div class="product-title">${item.단계}</div>
-                        <div class="price-badge">₩${item.개당가격.toLocaleString()}/개</div>
-                    </div>
-                    <div class="product-details">
-                        <div class="detail-item">
-                            <div class="detail-label">한 박스 가격</div>
-                            <div class="detail-value">₩${item.한박스가격.toLocaleString()}</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">박스당 팩 수</div>
-                            <div class="detail-value">${item.박스당팩수}팩</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">팩당 개수</div>
-                            <div class="detail-value">${item.팩당개수}개</div>
-                        </div>
-                        <div class="detail-item">
-                            <div class="detail-label">총 개수</div>
-                            <div class="detail-value">${item.박스당팩수 * item.팩당개수}개</div>
-                        </div>
-                    </div>
-                `;
-                
-                productCards.appendChild(card);
+            typeSelect.disabled = false;
+            typeSelect.innerHTML = '<option value="">종류를 선택하세요</option>';
+            types.forEach(type => {
+                const option = document.createElement('option');
+                option.value = type;
+                option.textContent = type;
+                typeSelect.appendChild(option);
             });
-            
-            results.classList.add('show');
-            results.scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // 페이지 로드 시 데이터 로드
-        document.addEventListener('DOMContentLoaded', function() {
-            // SHEET_ID가 설정되지 않았을 때
-            if (SHEET_ID === 'YOUR_GOOGLE_SHEET_ID_HERE') {
-                errorMessage.querySelector('p:first-child').textContent = '❌ 구글시트 ID를 설정해주세요.';
-                errorMessage.querySelector('p:last-child').textContent = '코드에서 SHEET_ID 변수를 수정하세요.';
-                errorMessage.classList.add('show');
-                loadFallbackData();
-            } else {
-                loadDataFromSheet();
-            }
         });
+        
+        // 제품 검색
+        function searchProducts() {
+            const selectedBrand = document.getElementById('brand').value;
+            const selectedType = document.getElementById('type').value;
+            const resultsSection = document.getElementById('results');
+            const resultsGrid = document.getElementById('resultsGrid');
+            
+            if (!selectedBrand || !selectedType) {
+                alert('브랜드와 종류를 모두 선택해주세요.');
+                return;
+            }
+            
+            const filteredProducts = spreadsheetData.filter(item => 
+                item['브랜드'] === selectedBrand && item['종류'] === selectedType
+            );
+            
+            resultsGrid.innerHTML = '';
+            
+            if (filteredProducts.length === 0) {
+                resultsGrid.innerHTML = '<p style="text-align: center; color: #666;">검색 결과가 없습니다.</p>';
+            } else {
+                filteredProducts.forEach((product, index) => {
+                    const card = createProductCard(product, index);
+                    resultsGrid.appendChild(card);
+                });
+            }
+            
+            resultsSection.style.display = 'block';
+        }
+        
+        // 제품 카드 생성
+        function createProductCard(product, index) {
+            const card = document.createElement('div');
+            card.className = 'product-card';
+            
+            const boxPrice = product['한박스가격'] || '정보없음';
+            const packsPerBox = product['박스당 팩수'] || '정보없음';
+            const piecesPerPack = product['팩당 개수'] || '정보없음';
+            const pricePerPiece = product['개당가격'] || '정보없음';
+            const link = product['링크'] || '';
+            
+            card.innerHTML = `
+                <div class="product-header">
+                    <div class="product-brand">${product['브랜드']}</div>
+                    <div class="product-type">${product['종류']}</div>
+                </div>
+                
+                <div class="price-highlight">
+                    <div class="detail-label">개당가격</div>
+                    <div class="price-value">${pricePerPiece}원</div>
+                </div>
+                
+                <div class="product-details">
+                    <div class="detail-item">
+                        <div class="detail-label">한박스가격</div>
+                        <div class="detail-value">${typeof boxPrice === 'number' ? boxPrice.toLocaleString() : boxPrice}원</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">박스당 팩수</div>
+                        <div class="detail-value">${packsPerBox}팩</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">팩당 개수</div>
+                        <div class="detail-value">${piecesPerPack}개</div>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <div class="detail-label">총 개수</div>
+                        <div class="detail-value">${calculateTotalPieces(packsPerBox, piecesPerPack)}개</div>
+                    </div>
+                </div>
+                
+                <button class="info-btn" onclick="openProductLink('${link}')" ${!link ? 'disabled' : ''}>
+                    ${link ? '정보보기' : '링크없음'}
+                </button>
+            `;
+            
+            return card;
+        }
+        
+        // 총 개수 계산
+        function calculateTotalPieces(packsPerBox, piecesPerPack) {
+            const packs = parseInt(packsPerBox) || 0;
+            const pieces = parseInt(piecesPerPack) || 0;
+            return packs * pieces;
+        }
+        
+        // 제품 링크 열기
+        function openProductLink(link) {
+            if (link) {
+                window.open(link, '_blank');
+            }
+        }
+        
+        // 페이지 로드시 데이터 불러오기
+        window.addEventListener('load', loadSpreadsheetData);
     </script>
 </body>
 </html>
