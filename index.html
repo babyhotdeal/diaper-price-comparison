@@ -179,38 +179,47 @@
             margin-bottom: 15px;
         }
         
+        .price-highlight .detail-label {
+            color: white;
+            opacity: 0.9;
+        }
+        
         .price-value {
             font-size: 1.3rem;
             font-weight: bold;
+            color: white;
         }
         
-        .info-icon {
-            position: absolute;
-            top: -5px;
-            right: -5px;
+        .info-btn {
+            width: 100%;
             background: #28a745;
             color: white;
             border: none;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
+            transition: all 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            transition: all 0.3s;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            gap: 8px;
+            margin-top: 15px;
         }
         
-        .info-icon:hover {
+        .info-btn:hover {
             background: #218838;
-            transform: scale(1.1);
+            transform: translateY(-2px);
         }
         
-        .info-icon:disabled {
+        .info-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
+        }
+        
+        .info-btn-icon {
+            font-size: 18px;
         }
         
         .calculator-section {
@@ -417,15 +426,27 @@
                 '종류': '네이처메이드 2024 (팬티)',
                 '한박스가격': 38000,
                 '박스당 팩수': 3,
+                '단계': '4단계',
                 '팩당 개수': 76,
                 '개당가격': 167,
                 '링크': 'https://link.coupang.com/a/cN2gXi'
             },
             {
                 '브랜드': '하기스',
+                '종류': '네이처메이드 2024 (밴드)',
+                '한박스가격': 35800,
+                '박스당 팩수': 2,
+                '단계': '1단계',
+                '팩당 개수': 66,
+                '개당가격': 181,
+                '링크': 'https://link.coupang.com/a/cN2fkv'
+            },
+            {
+                '브랜드': '하기스',
                 '종류': '스킨에센셜 2025 (밴드)',
                 '한박스가격': 38000,
                 '박스당 팩수': 2,
+                '단계': '2단계',
                 '팩당 개수': 66,
                 '개당가격': 288,
                 '링크': 'https://link.coupang.com/a/cN2fkv'
@@ -435,17 +456,9 @@
                 '종류': '에어드라이 (밴드)',
                 '한박스가격': 22000,
                 '박스당 팩수': 4,
+                '단계': 'S사이즈',
                 '팩당 개수': 34,
                 '개당가격': 162,
-                '링크': 'https://example.com'
-            },
-            {
-                '브랜드': '쿠잉',
-                '종류': '에어드라이 (팬티)',
-                '한박스가격': 22000,
-                '박스당 팩수': 4,
-                '팩당 개수': 30,
-                '개당가격': 183,
                 '링크': 'https://example.com'
             }
         ];
@@ -598,13 +611,17 @@
             const packsPerBox = parseInt(product['박스당 팩수']) || 0;
             const piecesPerPack = parseInt(product['팩당 개수']) || 0;
             const pricePerPiece = parseInt(product['개당가격']) || 0;
+            const stage = product['단계'] || '';
             const link = product['링크'] || '';
             const totalPieces = calculateTotalPieces(packsPerBox, piecesPerPack);
+            
+            // 종류와 단계 결합
+            const fullType = stage ? `${product['종류'] || ''} (${stage})` : (product['종류'] || '종류 정보 없음');
             
             card.innerHTML = `
                 <div class="product-header">
                     <div class="product-brand">${product['브랜드'] || '브랜드 정보 없음'}</div>
-                    <div class="product-type">${product['종류'] || '종류 정보 없음'}</div>
+                    <div class="product-type">${fullType}</div>
                 </div>
                 
                 <div class="price-highlight">
@@ -631,9 +648,20 @@
                     <div class="detail-item">
                         <div class="detail-label">총 개수</div>
                         <div class="detail-value">${totalPieces || 0}개</div>
-                        ${link && link !== '' ? `<button class="info-icon" onclick="openProductLink('${link}')" title="정보보기">ℹ️</button>` : ''}
                     </div>
                 </div>
+                
+                ${link && link !== '' ? `
+                    <button class="info-btn" onclick="openProductLink('${link}')">
+                        <span class="info-btn-icon">🔗</span>
+                        정보보기
+                    </button>
+                ` : `
+                    <button class="info-btn" disabled>
+                        <span class="info-btn-icon">❌</span>
+                        링크없음
+                    </button>
+                `}
             `;
             
             return card;
