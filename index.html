@@ -415,20 +415,11 @@
             {
                 '브랜드': '하기스',
                 '종류': '네이처메이드 2024 (팬티)',
-                '한박스가격': 41000,
-                '박스당 팩수': 2,
-                '팩당 개수': 42,
-                '개당가격': 488,
-                '링크': 'https://example.com'
-            },
-            {
-                '브랜드': '하기스',
-                '종류': '네이처메이드 2024 (팬티)',
-                '한박스가격': 41000,
-                '박스당 팩수': 2,
-                '팩당 개수': 34,
-                '개당가격': 603,
-                '링크': 'https://example.com'
+                '한박스가격': 38000,
+                '박스당 팩수': 3,
+                '팩당 개수': 76,
+                '개당가격': 167,
+                '링크': 'https://link.coupang.com/a/cN2gXi'
             },
             {
                 '브랜드': '하기스',
@@ -437,7 +428,7 @@
                 '박스당 팩수': 2,
                 '팩당 개수': 66,
                 '개당가격': 288,
-                '링크': 'https://example.com'
+                '링크': 'https://link.coupang.com/a/cN2fkv'
             },
             {
                 '브랜드': '쿠잉',
@@ -446,6 +437,15 @@
                 '박스당 팩수': 4,
                 '팩당 개수': 34,
                 '개당가격': 162,
+                '링크': 'https://example.com'
+            },
+            {
+                '브랜드': '쿠잉',
+                '종류': '에어드라이 (팬티)',
+                '한박스가격': 22000,
+                '박스당 팩수': 4,
+                '팩당 개수': 30,
+                '개당가격': 183,
                 '링크': 'https://example.com'
             }
         ];
@@ -594,44 +594,44 @@
             const card = document.createElement('div');
             card.className = 'product-card';
             
-            const boxPrice = product['한박스가격'] || 0;
-            const packsPerBox = product['박스당 팩수'] || 0;
-            const piecesPerPack = product['팩당 개수'] || 0;
-            const pricePerPiece = product['개당가격'] || 0;
+            const boxPrice = parseInt(product['한박스가격']) || 0;
+            const packsPerBox = parseInt(product['박스당 팩수']) || 0;
+            const piecesPerPack = parseInt(product['팩당 개수']) || 0;
+            const pricePerPiece = parseInt(product['개당가격']) || 0;
             const link = product['링크'] || '';
             const totalPieces = calculateTotalPieces(packsPerBox, piecesPerPack);
             
             card.innerHTML = `
                 <div class="product-header">
-                    <div class="product-brand">${product['브랜드']}</div>
-                    <div class="product-type">${product['종류']}</div>
+                    <div class="product-brand">${product['브랜드'] || '브랜드 정보 없음'}</div>
+                    <div class="product-type">${product['종류'] || '종류 정보 없음'}</div>
                 </div>
                 
                 <div class="price-highlight">
                     <div class="detail-label">개당가격</div>
-                    <div class="price-value">${typeof pricePerPiece === 'number' ? pricePerPiece.toLocaleString() : pricePerPiece}원</div>
+                    <div class="price-value">${pricePerPiece ? pricePerPiece.toLocaleString() + '원' : '정보없음'}</div>
                 </div>
                 
                 <div class="product-details">
                     <div class="detail-item">
                         <div class="detail-label">한박스가격</div>
-                        <div class="detail-value">${typeof boxPrice === 'number' ? boxPrice.toLocaleString() : boxPrice}원</div>
+                        <div class="detail-value">${boxPrice ? boxPrice.toLocaleString() + '원' : '정보없음'}</div>
                     </div>
                     
                     <div class="detail-item">
                         <div class="detail-label">박스당 팩수</div>
-                        <div class="detail-value">${packsPerBox}팩</div>
+                        <div class="detail-value">${packsPerBox || 0}팩</div>
                     </div>
                     
                     <div class="detail-item">
                         <div class="detail-label">팩당 개수</div>
-                        <div class="detail-value">${piecesPerPack}개</div>
+                        <div class="detail-value">${piecesPerPack || 0}개</div>
                     </div>
                     
                     <div class="detail-item">
                         <div class="detail-label">총 개수</div>
-                        <div class="detail-value">${totalPieces}개</div>
-                        ${link ? `<button class="info-icon" onclick="openProductLink('${link}')" title="정보보기">ℹ️</button>` : ''}
+                        <div class="detail-value">${totalPieces || 0}개</div>
+                        ${link && link !== '' ? `<button class="info-icon" onclick="openProductLink('${link}')" title="정보보기">ℹ️</button>` : ''}
                     </div>
                 </div>
             `;
