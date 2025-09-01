@@ -117,7 +117,6 @@
             padding: 25px;
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             transition: transform 0.3s;
-            position: relative;
         }
         
         .product-card:hover {
@@ -147,7 +146,6 @@
             grid-template-columns: 1fr 1fr;
             gap: 15px;
             margin-bottom: 20px;
-            position: relative;
         }
         
         .detail-item {
@@ -155,7 +153,6 @@
             padding: 15px 10px;
             background: #f8f9fa;
             border-radius: 8px;
-            position: relative;
         }
         
         .detail-label {
@@ -182,6 +179,7 @@
         .price-highlight .detail-label {
             color: white;
             opacity: 0.9;
+            margin-bottom: 8px;
         }
         
         .price-value {
@@ -419,54 +417,64 @@
         let spreadsheetData = [];
         const SPREADSHEET_ID = '1imkQ1si-rCEUE0En62TZ4zUOZNcpH9f03EbGrG4kaoM';
         
-        // 샘플 데이터 (구글 시트 연동 실패시 사용)
+        // 실제 시트 데이터 구조에 맞춘 샘플 데이터
         const sampleData = [
             {
-                '브랜드': '하기스',
-                '종류': '네이처메이드 2024 (밴드)',
-                '한박스가격': 35800,
-                '박스당 팩수': 2,
-                '단계': '1단계',
-                '팩당 개수': 66,
-                '개당가격': 181,
-                '링크': 'https://link.coupang.com/a/cN2fkv'
+                brand: '하기스',
+                type: '네이처메이드 2024 (밴드)',
+                boxPrice: 35800,
+                packsPerBox: 2,
+                stage: '1단계',
+                piecesPerPack: 66,
+                pricePerPiece: 181,
+                link: 'https://link.coupang.com/a/cN2fkv'
             },
             {
-                '브랜드': '하기스',
-                '종류': '네이처메이드 2024 (팬티)',
-                '한박스가격': 38000,
-                '박스당 팩수': 3,
-                '단계': '4단계',
-                '팩당 개수': 76,
-                '개당가격': 167,
-                '링크': 'https://link.coupang.com/a/cN2gXi'
+                brand: '하기스',
+                type: '네이처메이드 2024 (팬티)',
+                boxPrice: 38000,
+                packsPerBox: 3,
+                stage: '4단계',
+                piecesPerPack: 76,
+                pricePerPiece: 167,
+                link: 'https://link.coupang.com/a/cN2gXi'
             },
             {
-                '브랜드': '하기스',
-                '종류': '스킨에센셜 2025 (밴드)',
-                '한박스가격': 38000,
-                '박스당 팩수': 2,
-                '단계': '2단계',
-                '팩당 개수': 66,
-                '개당가격': 288,
-                '링크': 'https://link.coupang.com/a/cN2fkv'
+                brand: '하기스',
+                type: '스킨에센셜 2025 (밴드)',
+                boxPrice: 38000,
+                packsPerBox: 2,
+                stage: '2단계',
+                piecesPerPack: 66,
+                pricePerPiece: 288,
+                link: 'https://link.coupang.com/a/cN2abc'
             },
             {
-                '브랜드': '쿠잉',
-                '종류': '에어드라이 (밴드)',
-                '한박스가격': 22000,
-                '박스당 팩수': 4,
-                '단계': 'S사이즈',
-                '팩당 개수': 34,
-                '개당가격': 162,
-                '링크': 'https://example.com'
+                brand: '쿠잉',
+                type: '에어드라이 (밴드)',
+                boxPrice: 22000,
+                packsPerBox: 4,
+                stage: 'S사이즈',
+                piecesPerPack: 34,
+                pricePerPiece: 162,
+                link: 'https://example.com'
+            },
+            {
+                brand: '쿠잉',
+                type: '에어드라이 (팬티)',
+                boxPrice: 22000,
+                packsPerBox: 4,
+                stage: 'M사이즈',
+                piecesPerPack: 30,
+                pricePerPiece: 183,
+                link: 'https://example.com'
             }
         ];
         
-        // 구글 시트 CSV URL (웹에 게시한 URL로 교체하세요)
+        // 구글 시트 CSV URL
         const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
         
-        // 데이터 로드 (구글 시트 CSV 직접 접근)
+        // 데이터 로드
         async function loadSpreadsheetData() {
             const loading = document.getElementById('loading');
             const error = document.getElementById('error');
@@ -475,64 +483,76 @@
                 loading.style.display = 'block';
                 error.style.display = 'none';
                 
-                // 구글 시트 CSV 데이터 가져오기
+                // 구글 시트에서 데이터 가져오기 시도
                 const response = await fetch(SHEET_CSV_URL);
                 
-                if (!response.ok) {
-                    throw new Error('시트 데이터 접근 실패');
+                if (response.ok) {
+                    const csvText = await response.text();
+                    const parsedData = parseCSVToProducts(csvText);
+                    
+                    if (parsedData.length > 0) {
+                        spreadsheetData = parsedData;
+                        console.log('구글 시트 데이터 로드 성공:', spreadsheetData);
+                    } else {
+                        throw new Error('파싱된 데이터가 비어있음');
+                    }
+                } else {
+                    throw new Error('시트 접근 실패');
                 }
-                
-                const csvText = await response.text();
-                spreadsheetData = parseCSV(csvText);
-                
-                if (spreadsheetData.length === 0) {
-                    throw new Error('데이터가 비어있습니다');
-                }
-                
-                populateBrands();
-                loading.style.display = 'none';
                 
             } catch (err) {
-                console.error('데이터 로드 실패:', err);
-                loading.style.display = 'none';
-                
-                // 실패시 샘플 데이터 사용
+                console.error('구글 시트 로드 실패:', err);
                 console.log('샘플 데이터로 대체합니다.');
                 spreadsheetData = sampleData;
+            } finally {
+                loading.style.display = 'none';
                 populateBrands();
             }
         }
         
-        // CSV 파싱 함수
-        function parseCSV(csvText) {
-            const lines = csvText.split('\n').filter(line => line.trim());
-            if (lines.length < 2) return [];
-            
-            const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
-            const data = [];
-            
-            for (let i = 1; i < lines.length; i++) {
-                const values = parseCSVLine(lines[i]);
-                const obj = {};
+        // CSV를 제품 데이터로 변환
+        function parseCSVToProducts(csvText) {
+            try {
+                const lines = csvText.split('\n').filter(line => line.trim());
+                if (lines.length < 2) return [];
                 
-                headers.forEach((header, index) => {
-                    let value = values[index] || '';
+                const data = [];
+                
+                // 헤더 라인 건너뛰고 데이터 파싱
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
                     
-                    // 숫자 필드 처리
-                    if (['한박스가격', '박스당 팩수', '팩당 개수', '개당가격'].includes(header)) {
-                        value = parseInt(value) || 0;
+                    const cells = parseCSVLine(line);
+                    
+                    // A=브랜드, B=종류, C=한박스가격, D=박스당팩수, E=단계, F=팩당개수, G=개당가격, H=링크
+                    if (cells.length >= 7) {
+                        const product = {
+                            brand: cells[0] || '',
+                            type: cells[1] || '',
+                            boxPrice: parseInt(cells[2]) || 0,
+                            packsPerBox: parseInt(cells[3]) || 0,
+                            stage: cells[4] || '',
+                            piecesPerPack: parseInt(cells[5]) || 0,
+                            pricePerPiece: parseInt(cells[6]) || 0,
+                            link: cells[7] || ''
+                        };
+                        
+                        // 유효한 데이터만 추가
+                        if (product.brand && product.type) {
+                            data.push(product);
+                        }
                     }
-                    
-                    obj[header] = value;
-                });
+                }
                 
-                data.push(obj);
+                return data;
+            } catch (err) {
+                console.error('CSV 파싱 오류:', err);
+                return [];
             }
-            
-            return data;
         }
         
-        // CSV 라인 파싱 (쉼표와 따옴표 처리)
+        // CSV 라인 파싱
         function parseCSVLine(line) {
             const result = [];
             let current = '';
@@ -544,21 +564,21 @@
                 if (char === '"') {
                     inQuotes = !inQuotes;
                 } else if (char === ',' && !inQuotes) {
-                    result.push(current.trim());
+                    result.push(current.trim().replace(/^"|"$/g, ''));
                     current = '';
                 } else {
                     current += char;
                 }
             }
             
-            result.push(current.trim());
+            result.push(current.trim().replace(/^"|"$/g, ''));
             return result;
         }
         
         // 브랜드 옵션 채우기
         function populateBrands() {
             const brandSelect = document.getElementById('brand');
-            const brands = [...new Set(spreadsheetData.map(item => item['브랜드']).filter(brand => brand))];
+            const brands = [...new Set(spreadsheetData.map(item => item.brand).filter(brand => brand))];
             
             brandSelect.innerHTML = '<option value="">브랜드를 선택하세요</option>';
             brands.forEach(brand => {
@@ -581,8 +601,8 @@
             }
             
             const types = [...new Set(spreadsheetData
-                .filter(item => item['브랜드'] === selectedBrand)
-                .map(item => item['종류'])
+                .filter(item => item.brand === selectedBrand)
+                .map(item => item.type)
                 .filter(type => type))];
             
             typeSelect.disabled = false;
@@ -608,16 +628,16 @@
             }
             
             const filteredProducts = spreadsheetData.filter(item => 
-                item['브랜드'] === selectedBrand && item['종류'] === selectedType
+                item.brand === selectedBrand && item.type === selectedType
             );
             
             resultsGrid.innerHTML = '';
             
             if (filteredProducts.length === 0) {
-                resultsGrid.innerHTML = '<p style="text-align: center; color: #666;">검색 결과가 없습니다.</p>';
+                resultsGrid.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">검색 결과가 없습니다.</p>';
             } else {
-                filteredProducts.forEach((product, index) => {
-                    const card = createProductCard(product, index);
+                filteredProducts.forEach((product) => {
+                    const card = createProductCard(product);
                     resultsGrid.appendChild(card);
                 });
             }
@@ -626,56 +646,48 @@
         }
         
         // 제품 카드 생성
-        function createProductCard(product, index) {
+        function createProductCard(product) {
             const card = document.createElement('div');
             card.className = 'product-card';
             
-            const boxPrice = parseInt(product['한박스가격']) || 0;
-            const packsPerBox = parseInt(product['박스당 팩수']) || 0;
-            const piecesPerPack = parseInt(product['팩당 개수']) || 0;
-            const pricePerPiece = parseInt(product['개당가격']) || 0;
-            const stage = product['단계'] || '';
-            const link = product['링크'] || '';
-            const totalPieces = calculateTotalPieces(packsPerBox, piecesPerPack);
-            
-            // 종류와 단계 결합
-            const fullType = stage ? `${product['종류'] || ''} (${stage})` : (product['종류'] || '종류 정보 없음');
+            const totalPieces = product.packsPerBox * product.piecesPerPack;
+            const displayType = product.stage ? `${product.type} (${product.stage})` : product.type;
             
             card.innerHTML = `
                 <div class="product-header">
-                    <div class="product-brand">${product['브랜드'] || '브랜드 정보 없음'}</div>
-                    <div class="product-type">${fullType}</div>
+                    <div class="product-brand">${product.brand}</div>
+                    <div class="product-type">${displayType}</div>
                 </div>
                 
                 <div class="price-highlight">
                     <div class="detail-label">개당가격</div>
-                    <div class="price-value">${pricePerPiece ? pricePerPiece.toLocaleString() + '원' : '정보없음'}</div>
+                    <div class="price-value">${product.pricePerPiece.toLocaleString()}원</div>
                 </div>
                 
                 <div class="product-details">
                     <div class="detail-item">
                         <div class="detail-label">한박스가격</div>
-                        <div class="detail-value">${boxPrice ? boxPrice.toLocaleString() + '원' : '정보없음'}</div>
+                        <div class="detail-value">${product.boxPrice.toLocaleString()}원</div>
                     </div>
                     
                     <div class="detail-item">
                         <div class="detail-label">박스당 팩수</div>
-                        <div class="detail-value">${packsPerBox || 0}팩</div>
+                        <div class="detail-value">${product.packsPerBox}팩</div>
                     </div>
                     
                     <div class="detail-item">
                         <div class="detail-label">팩당 개수</div>
-                        <div class="detail-value">${piecesPerPack || 0}개</div>
+                        <div class="detail-value">${product.piecesPerPack}개</div>
                     </div>
                     
                     <div class="detail-item">
                         <div class="detail-label">총 개수</div>
-                        <div class="detail-value">${totalPieces || 0}개</div>
+                        <div class="detail-value">${totalPieces}개</div>
                     </div>
                 </div>
                 
-                ${link && link !== '' ? `
-                    <button class="info-btn" onclick="openProductLink('${link}')">
+                ${product.link && product.link !== '' ? `
+                    <button class="info-btn" onclick="openProductLink('${product.link}')">
                         <span class="info-btn-icon">🔗</span>
                         정보보기
                     </button>
@@ -690,16 +702,9 @@
             return card;
         }
         
-        // 총 개수 계산
-        function calculateTotalPieces(packsPerBox, piecesPerPack) {
-            const packs = parseInt(packsPerBox) || 0;
-            const pieces = parseInt(piecesPerPack) || 0;
-            return packs * pieces;
-        }
-        
         // 제품 링크 열기
         function openProductLink(link) {
-            if (link) {
+            if (link && link !== '') {
                 window.open(link, '_blank');
             }
         }
