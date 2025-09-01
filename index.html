@@ -408,6 +408,7 @@
 
     <script>
         let spreadsheetData = [];
+        const SPREADSHEET_ID = '1imkQ1si-rCEUE0En62TZ4zUOZNcpH9f03EbGrG4kaoM';
         
         // 샘플 데이터 (구글 시트 연동 실패시 사용)
         const sampleData = [
@@ -449,7 +450,10 @@
             }
         ];
         
-        // 데이터 로드 (실제 구글 시트 연동 또는 샘플 데이터 사용)
+        // 구글 시트 CSV URL (웹에 게시한 URL로 교체하세요)
+        const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
+        
+        // 데이터 로드 (구글 시트 CSV 직접 접근)
         async function loadSpreadsheetData() {
             const loading = document.getElementById('loading');
             const error = document.getElementById('error');
@@ -458,24 +462,61 @@
                 loading.style.display = 'block';
                 error.style.display = 'none';
                 
-                // 실제 환경에서는 구글 시트 API 사용
-                // 현재는 샘플 데이터로 테스트
-                await new Promise(resolve => setTimeout(resolve, 1000)); // 로딩 시뮬레이션
+                // 구글 시트 CSV 데이터 가져오기
+                const response = await fetch(SHEET_CSV_URL);
                 
-                spreadsheetData = sampleData;
+                if (!response.ok) {
+                    throw new Error('시트 데이터 접근 실패');
+                }
+                
+                const csvText = await response.text();
+                spreadsheetData = parseCSV(csvText);
+                
+                if (spreadsheetData.length === 0) {
+                    throw new Error('데이터가 비어있습니다');
+                }
+                
                 populateBrands();
                 loading.style.display = 'none';
                 
             } catch (err) {
                 console.error('데이터 로드 실패:', err);
                 loading.style.display = 'none';
-                error.style.display = 'block';
                 
-                // 에러시에도 샘플 데이터로 진행
+                // 실패시 샘플 데이터 사용
+                console.log('샘플 데이터로 대체합니다.');
                 spreadsheetData = sampleData;
                 populateBrands();
-                error.style.display = 'none';
             }
+        }
+        
+        // CSV 파싱 함수
+        function parseCSV(csvText) {
+            const lines = csvText.split('\n').filter(line => line.trim());
+            if (lines.length < 2) return [];
+            
+            const headers = lines[0].split(',').map(h => h.replace(/"/g, '').trim());
+            const data = [];
+            
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',').map(v => v.replace(/"/g, '').trim());
+                const obj = {};
+                
+                headers.forEach((header, index) => {
+                    let value = values[index] || '';
+                    
+                    // 숫자 필드 처리
+                    if (['한박스가격', '박스당 팩수', '팩당 개수', '개당가격'].includes(header)) {
+                        value = parseInt(value) || 0;
+                    }
+                    
+                    obj[header] = value;
+                });
+                
+                data.push(obj);
+            }
+            
+            return data;
         }
         
         // 브랜드 옵션 채우기
