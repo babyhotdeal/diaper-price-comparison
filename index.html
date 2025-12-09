@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -342,72 +344,80 @@
 </head>
 <body>
     <div class="container">
-    <div class="content">
-        <div class="header">
-            <h1>
-                🏷️ 기저귀 가격비교
-            </h1>
-            <p>최저가 기저귀를 찾아보세요! (구글시트 연동)</p>
-        </div>
-
-        <div class="search-section">
-            <div class="search-form">
-                <div class="form-group">
-                    <label for="brand">브랜드 선택</label>
-                    <select id="brand">
-                        <option value="">브랜드를 선택하세요</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="type">종류 선택</label>
-                    <select id="type" disabled>
-                        <option value="">종류를 선택하세요</option>
-                    </select>
-                </div>
-
-                <button class="search-btn" onclick="searchProducts()">제품 검색</button>
-            </div>
-        </div>
-
-        <div id="loading" class="loading" style="display: none;">
-            데이터를 불러오는 중...
-        </div>
-
-        <div id="error" class="error" style="display: none;">
-            데이터를 불러오는데 실패했습니다. 샘플 데이터로 테스트해보세요.
-        </div>
-
-        <div id="results" class="results-section">
-            <div class="results-grid" id="resultsGrid">
-            </div>
-        </div>
-
-        <!-- 가격 계산기 섹션 -->
-        <div class="calculator-section">
-            <div class="calculator-title">🧮 기저귀 가격 계산기</div>
-            <div class="calculator-form">
-                <div class="calc-group">
-                    <label for="productPrice">제품가격 (원)</label>
-                    <input type="number" id="productPrice" placeholder="예: 38000">
-                </div>
-
-                <div class="calc-group">
-                    <label for="packCount">매수 (팩)</label>
-                    <input type="number" id="packCount" placeholder="예: 3">
-                </div>
-
-                <div class="calc-group">
-                    <label for="pieceCount">수량 (개/팩)</label>
-                    <input type="number" id="pieceCount" placeholder="예: 76">
-                </div>
-
-                <button class="calc-btn" onclick="calculatePrice()">계산하기</button>
+        <div class="content">
+            <div class="header">
+                <h1>
+                    🏷️ 기저귀 가격비교
+                </h1>
+                <p>최저가 기저귀를 찾아보세요! (구글시트 연동)</p>
+                <a href="https://www.aptaclubkorea.com/?invitation_code=23304" target="_blank" style="display: inline-block; margin-top: 15px; padding: 12px 30px; background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%); color: white; text-decoration: none; border-radius: 25px; font-weight: 600; font-size: 1rem; box-shadow: 0 4px 15px rgba(255,107,107,0.3); transition: transform 0.2s;">
+                    🎁 압타클럽 회원가입 네이버페이 5000원 무료!
+                </a>
             </div>
 
-            <div id="calcResult" class="calc-result">
-                <div class="calc-result-label">한 장당 가격</div>
-                <div class="calc-result-value" id="resultValue">0원</div>
+            <div class="search-section">
+                <div class="search-form">
+                    <div class="form-group">
+                        <label for="brand">브랜드 선택</label>
+                        <select id="brand">
+                            <option value="">브랜드를 선택하세요</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="type">종류 선택</label>
+                        <select id="type" disabled>
+                            <option value="">종류를 선택하세요</option>
+                        </select>
+                    </div>
+
+                    <button class="search-btn" onclick="searchProducts()">제품 검색</button>
+                </div>
+            </div>
+
+            <div id="loading" class="loading" style="display: none;">
+                데이터를 불러오는 중...
+            </div>
+
+            <div id="error" class="error" style="display: none;">
+                데이터를 불러오는데 실패했습니다. 샘플 데이터로 테스트해보세요.
+            </div>
+
+            <div id="results" class="results-section">
+                <div class="results-grid" id="resultsGrid">
+                </div>
+            </div>
+
+            <!-- 가격 계산기 섹션 -->
+            <div class="calculator-section">
+                <div class="calculator-title">🧮 기저귀 가격 계산기</div>
+                <div class="calculator-form">
+                    <div class="calc-group">
+                        <label for="productPrice">제품가격 (원)</label>
+                        <input type="number" id="productPrice" placeholder="예: 38000">
+                    </div>
+
+                    <div class="calc-group">
+                        <label for="packCount">매수 (팩)</label>
+                        <input type="number" id="packCount" placeholder="예: 3">
+                    </div>
+
+                    <div class="calc-group">
+                        <label for="pieceCount">수량 (개/팩)</label>
+                        <input type="number" id="pieceCount" placeholder="예: 76">
+                    </div>
+
+                    <button class="calc-btn" onclick="calculatePrice()">계산하기</button>
+                </div>
+
+                <div id="calcResult" class="calc-result">
+                    <div class="calc-result-label">한 장당 가격</div>
+                    <div class="calc-result-value" id="resultValue">0원</div>
+                </div>
+            </div>
+
+            <div style="text-align:center; font-size:10pt; color:#666; background:#f8f9fa; padding:20px; margin-top:30px; border-radius:10px;">
+                이 사이트는 네이버 쇼핑커넥트와 쿠팡 파트너스 활동의 일환으로 판매 발생시 수수료를 제공받습니다.
             </div>
         </div>
     </div>
@@ -742,8 +752,5 @@
         // 페이지 로드시 데이터 불러오기
         window.addEventListener('load', loadSpreadsheetData);
     </script>
-    <footer style="position:fixed; bottom:0; left:0; width:100%; text-align:center; font-size:10pt; color:#000; background:#fff; padding:15px 0; z-index:9999; box-shadow:0 -1px 3px rgba(0,0,0,0.1);">
-  이 사이트는 네이버 쇼핑커넥트와 쿠팡 파트너스 활동의 일환으로 판매 발생시 수수료를 제공받습니다.
-</footer>
 </body>
 </html>
