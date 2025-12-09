@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -10,25 +9,25 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
         }
-        
+
         .header {
             text-align: center;
             color: white;
             margin-bottom: 30px;
         }
-        
+
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 10px;
@@ -37,12 +36,12 @@
             justify-content: center;
             gap: 10px;
         }
-        
+
         .header p {
             font-size: 1.1rem;
             opacity: 0.9;
         }
-        
+
         .search-section {
             background: white;
             border-radius: 20px;
@@ -50,25 +49,25 @@
             margin-bottom: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        
+
         .search-form {
             display: grid;
             grid-template-columns: 1fr 1fr auto;
             gap: 20px;
             align-items: end;
         }
-        
+
         .form-group {
             display: flex;
             flex-direction: column;
         }
-        
+
         .form-group label {
             margin-bottom: 8px;
             font-weight: 600;
             color: #333;
         }
-        
+
         .form-group select {
             padding: 12px 15px;
             border: 2px solid #e1e5e9;
@@ -77,12 +76,12 @@
             background: white;
             transition: border-color 0.3s;
         }
-        
+
         .form-group select:focus {
             outline: none;
             border-color: #667eea;
         }
-        
+
         .search-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -95,22 +94,22 @@
             transition: transform 0.2s;
             height: fit-content;
         }
-        
+
         .search-btn:hover {
             transform: translateY(-2px);
         }
-        
+
         .results-section {
             display: none;
             margin-bottom: 40px;
         }
-        
+
         .results-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 20px;
         }
-        
+
         .product-card {
             background: white;
             border-radius: 15px;
@@ -118,55 +117,55 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             transition: transform 0.3s;
         }
-        
+
         .product-card:hover {
             transform: translateY(-5px);
         }
-        
+
         .product-header {
             margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 2px solid #f0f0f0;
         }
-        
+
         .product-brand {
             font-size: 1.1rem;
             font-weight: 600;
             color: #667eea;
             margin-bottom: 5px;
         }
-        
+
         .product-type {
             font-size: 1rem;
             color: #666;
         }
-        
+
         .product-details {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 15px;
             margin-bottom: 20px;
         }
-        
+
         .detail-item {
             text-align: center;
             padding: 15px 10px;
             background: #f8f9fa;
             border-radius: 8px;
         }
-        
+
         .detail-label {
             font-size: 0.9rem;
             color: #666;
             margin-bottom: 5px;
         }
-        
+
         .detail-value {
             font-size: 1.1rem;
             font-weight: 600;
             color: #333;
         }
-        
+
         .price-highlight {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -175,19 +174,19 @@
             text-align: center;
             margin-bottom: 15px;
         }
-        
+
         .price-highlight .detail-label {
             color: white;
             opacity: 0.9;
             margin-bottom: 8px;
         }
-        
+
         .price-value {
             font-size: 1.3rem;
             font-weight: bold;
             color: white;
         }
-        
+
         .info-btn {
             width: 100%;
             background: #28a745;
@@ -205,21 +204,21 @@
             gap: 8px;
             margin-top: 15px;
         }
-        
+
         .info-btn:hover {
             background: #218838;
             transform: translateY(-2px);
         }
-        
+
         .info-btn:disabled {
             background: #ccc;
             cursor: not-allowed;
         }
-        
+
         .info-btn-icon {
             font-size: 18px;
         }
-        
+
         .calculator-section {
             background: white;
             border-radius: 20px;
@@ -227,7 +226,7 @@
             margin-top: 30px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
-        
+
         .calculator-title {
             text-align: center;
             font-size: 1.5rem;
@@ -235,7 +234,7 @@
             color: #333;
             margin-bottom: 25px;
         }
-        
+
         .calculator-form {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -243,18 +242,18 @@
             align-items: end;
             margin-bottom: 20px;
         }
-        
+
         .calc-group {
             display: flex;
             flex-direction: column;
         }
-        
+
         .calc-group label {
             margin-bottom: 8px;
             font-weight: 600;
             color: #333;
         }
-        
+
         .calc-group input {
             padding: 12px 15px;
             border: 2px solid #e1e5e9;
@@ -263,12 +262,12 @@
             background: white;
             transition: border-color 0.3s;
         }
-        
+
         .calc-group input:focus {
             outline: none;
             border-color: #667eea;
         }
-        
+
         .calc-btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
@@ -281,11 +280,11 @@
             transition: transform 0.2s;
             height: fit-content;
         }
-        
+
         .calc-btn:hover {
             transform: translateY(-2px);
         }
-        
+
         .calc-result {
             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
             color: white;
@@ -295,25 +294,25 @@
             margin-top: 20px;
             display: none;
         }
-        
+
         .calc-result-label {
             font-size: 1rem;
             margin-bottom: 10px;
             opacity: 0.9;
         }
-        
+
         .calc-result-value {
             font-size: 2rem;
             font-weight: bold;
         }
-        
+
         .loading {
             text-align: center;
             color: white;
             font-size: 1.2rem;
             margin: 20px 0;
         }
-        
+
         .error {
             background: #f8d7da;
             color: #721c24;
@@ -322,20 +321,20 @@
             margin: 20px 0;
             text-align: center;
         }
-        
+
         @media (max-width: 768px) {
             .search-form {
                 grid-template-columns: 1fr;
             }
-            
+
             .calculator-form {
                 grid-template-columns: 1fr;
             }
-            
+
             .header h1 {
                 font-size: 2rem;
             }
-            
+
             .product-details {
                 grid-template-columns: 1fr;
             }
@@ -350,7 +349,7 @@
             </h1>
             <p>최저가 기저귀를 찾아보세요! (구글시트 연동)</p>
         </div>
-        
+
         <div class="search-section">
             <div class="search-form">
                 <div class="form-group">
@@ -359,31 +358,31 @@
                         <option value="">브랜드를 선택하세요</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="type">종류 선택</label>
                     <select id="type" disabled>
                         <option value="">종류를 선택하세요</option>
                     </select>
                 </div>
-                
+
                 <button class="search-btn" onclick="searchProducts()">제품 검색</button>
             </div>
         </div>
-        
+
         <div id="loading" class="loading" style="display: none;">
             데이터를 불러오는 중...
         </div>
-        
+
         <div id="error" class="error" style="display: none;">
             데이터를 불러오는데 실패했습니다. 샘플 데이터로 테스트해보세요.
         </div>
-        
+
         <div id="results" class="results-section">
             <div class="results-grid" id="resultsGrid">
             </div>
         </div>
-        
+
         <!-- 가격 계산기 섹션 -->
         <div class="calculator-section">
             <div class="calculator-title">🧮 기저귀 가격 계산기</div>
@@ -392,20 +391,20 @@
                     <label for="productPrice">제품가격 (원)</label>
                     <input type="number" id="productPrice" placeholder="예: 38000">
                 </div>
-                
+
                 <div class="calc-group">
                     <label for="packCount">매수 (팩)</label>
                     <input type="number" id="packCount" placeholder="예: 3">
                 </div>
-                
+
                 <div class="calc-group">
                     <label for="pieceCount">수량 (개/팩)</label>
                     <input type="number" id="pieceCount" placeholder="예: 76">
                 </div>
-                
+
                 <button class="calc-btn" onclick="calculatePrice()">계산하기</button>
             </div>
-            
+
             <div id="calcResult" class="calc-result">
                 <div class="calc-result-label">한 장당 가격</div>
                 <div class="calc-result-value" id="resultValue">0원</div>
@@ -416,7 +415,7 @@
     <script>
         let spreadsheetData = [];
         const SPREADSHEET_ID = '1imkQ1si-rCEUE0En62TZ4zUOZNcpH9f03EbGrG4kaoM';
-        
+
         // 실제 시트 데이터 구조에 맞춘 샘플 데이터
         const sampleData = [
             {
@@ -470,26 +469,26 @@
                 link: 'https://example.com'
             }
         ];
-        
+
         // 구글 시트 CSV URL
         const SHEET_CSV_URL = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=0`;
-        
+
         // 데이터 로드
         async function loadSpreadsheetData() {
             const loading = document.getElementById('loading');
             const error = document.getElementById('error');
-            
+
             try {
                 loading.style.display = 'block';
                 error.style.display = 'none';
-                
+
                 // 구글 시트에서 데이터 가져오기 시도
                 const response = await fetch(SHEET_CSV_URL);
-                
+
                 if (response.ok) {
                     const csvText = await response.text();
                     const parsedData = parseCSVToProducts(csvText);
-                    
+
                     if (parsedData.length > 0) {
                         spreadsheetData = parsedData;
                         console.log('구글 시트 데이터 로드 성공:', spreadsheetData);
@@ -499,7 +498,7 @@
                 } else {
                     throw new Error('시트 접근 실패');
                 }
-                
+
             } catch (err) {
                 console.error('구글 시트 로드 실패:', err);
                 console.log('샘플 데이터로 대체합니다.');
@@ -509,22 +508,22 @@
                 populateBrands();
             }
         }
-        
+
         // CSV를 제품 데이터로 변환
         function parseCSVToProducts(csvText) {
             try {
                 const lines = csvText.split('\n').filter(line => line.trim());
                 if (lines.length < 2) return [];
-                
+
                 const data = [];
-                
+
                 // 헤더 라인 건너뛰고 데이터 파싱
                 for (let i = 1; i < lines.length; i++) {
                     const line = lines[i].trim();
                     if (!line) continue;
-                    
+
                     const cells = parseCSVLine(line);
-                    
+
                     // A=브랜드, B=종류, C=한박스가격, D=박스당팩수, E=단계, F=팩당개수, G=개당가격, H=링크
                     if (cells.length >= 7) {
                         const product = {
@@ -537,30 +536,30 @@
                             pricePerPiece: parseInt(cells[6]) || 0,
                             link: cells[7] || ''
                         };
-                        
+
                         // 유효한 데이터만 추가
                         if (product.brand && product.type) {
                             data.push(product);
                         }
                     }
                 }
-                
+
                 return data;
             } catch (err) {
                 console.error('CSV 파싱 오류:', err);
                 return [];
             }
         }
-        
+
         // CSV 라인 파싱
         function parseCSVLine(line) {
             const result = [];
             let current = '';
             let inQuotes = false;
-            
+
             for (let i = 0; i < line.length; i++) {
                 const char = line[i];
-                
+
                 if (char === '"') {
                     inQuotes = !inQuotes;
                 } else if (char === ',' && !inQuotes) {
@@ -570,16 +569,16 @@
                     current += char;
                 }
             }
-            
+
             result.push(current.trim().replace(/^"|"$/g, ''));
             return result;
         }
-        
+
         // 브랜드 옵션 채우기
         function populateBrands() {
             const brandSelect = document.getElementById('brand');
             const brands = [...new Set(spreadsheetData.map(item => item.brand).filter(brand => brand))];
-            
+
             brandSelect.innerHTML = '<option value="">브랜드를 선택하세요</option>';
             brands.forEach(brand => {
                 const option = document.createElement('option');
@@ -588,23 +587,23 @@
                 brandSelect.appendChild(option);
             });
         }
-        
+
         // 브랜드 선택시 종류 업데이트
         document.getElementById('brand').addEventListener('change', function() {
             const selectedBrand = this.value;
             const typeSelect = document.getElementById('type');
-            
+
             if (!selectedBrand) {
                 typeSelect.disabled = true;
                 typeSelect.innerHTML = '<option value="">종류를 선택하세요</option>';
                 return;
             }
-            
+
             const types = [...new Set(spreadsheetData
                 .filter(item => item.brand === selectedBrand)
                 .map(item => item.type)
                 .filter(type => type))];
-            
+
             typeSelect.disabled = false;
             typeSelect.innerHTML = '<option value="">종류를 선택하세요</option>';
             types.forEach(type => {
@@ -614,25 +613,25 @@
                 typeSelect.appendChild(option);
             });
         });
-        
+
         // 제품 검색
         function searchProducts() {
             const selectedBrand = document.getElementById('brand').value;
             const selectedType = document.getElementById('type').value;
             const resultsSection = document.getElementById('results');
             const resultsGrid = document.getElementById('resultsGrid');
-            
+
             if (!selectedBrand || !selectedType) {
                 alert('브랜드와 종류를 모두 선택해주세요.');
                 return;
             }
-            
+
             const filteredProducts = spreadsheetData.filter(item => 
                 item.brand === selectedBrand && item.type === selectedType
             );
-            
+
             resultsGrid.innerHTML = '';
-            
+
             if (filteredProducts.length === 0) {
                 resultsGrid.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">검색 결과가 없습니다.</p>';
             } else {
@@ -641,18 +640,18 @@
                     resultsGrid.appendChild(card);
                 });
             }
-            
+
             resultsSection.style.display = 'block';
         }
-        
+
         // 제품 카드 생성
         function createProductCard(product) {
             const card = document.createElement('div');
             card.className = 'product-card';
-            
+
             const totalPieces = product.packsPerBox * product.piecesPerPack;
             const displayType = product.stage ? `${product.type} (${product.stage})` : product.type;
-            
+
             card.innerHTML = `
                 <div class="product-header">
                     <div class="product-brand">${product.brand}</div>
@@ -698,36 +697,36 @@
                     </button>
                 `}
             `;
-            
+
             return card;
         }
-        
+
         // 제품 링크 열기
         function openProductLink(link) {
             if (link && link !== '') {
                 window.open(link, '_blank');
             }
         }
-        
+
         // 가격 계산기
         function calculatePrice() {
             const productPrice = parseFloat(document.getElementById('productPrice').value) || 0;
             const packCount = parseFloat(document.getElementById('packCount').value) || 0;
             const pieceCount = parseFloat(document.getElementById('pieceCount').value) || 0;
-            
+
             if (productPrice === 0 || packCount === 0 || pieceCount === 0) {
                 alert('모든 값을 입력해주세요.');
                 return;
             }
-            
+
             const pricePerPiece = productPrice / packCount / pieceCount;
             const resultDiv = document.getElementById('calcResult');
             const resultValue = document.getElementById('resultValue');
-            
+
             resultValue.textContent = Math.round(pricePerPiece) + '원';
             resultDiv.style.display = 'block';
         }
-        
+
         // 계산기 입력 필드에서 엔터키 처리
         document.addEventListener('DOMContentLoaded', function() {
             const calcInputs = document.querySelectorAll('.calc-group input');
@@ -739,10 +738,12 @@
                 });
             });
         });
-        
+
         // 페이지 로드시 데이터 불러오기
         window.addEventListener('load', loadSpreadsheetData);
     </script>
+    <footer style="position:fixed; bottom:0; left:0; width:100%; text-align:center; font-size:10pt; color:#000; background:#fff; padding:15px 0; z-index:9999; box-shadow:0 -1px 3px rgba(0,0,0,0.1);">
+  이 사이트는 네이버 쇼핑커넥트와 쿠팡 파트너스 활동의 일환으로 판매 발생시 수수료를 제공받습니다.
    <footer style="
   text-align:center;
   font-size:10pt;
