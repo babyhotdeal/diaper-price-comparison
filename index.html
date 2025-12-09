@@ -38,30 +38,6 @@
         .header p {
             color: rgba(255,255,255,0.9);
             font-size: 1.1em;
-            margin-bottom: 20px;
-        }
-
-        .welcome-gift-btn {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin: 15px auto;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
-        }
-
-        .welcome-gift-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
         }
 
         .search-section {
@@ -345,14 +321,6 @@
             background: rgba(255,255,255,0.3);
         }
 
-        footer {
-            text-align: center;
-            font-size: 10pt;
-            color: rgba(255,255,255,0.7);
-            margin-top: 50px;
-            padding-bottom: 20px;
-        }
-
         @media (max-width: 768px) {
             .search-form {
                 grid-template-columns: 1fr;
@@ -370,11 +338,6 @@
             .product-details {
                 grid-template-columns: 1fr;
             }
-
-            .welcome-gift-btn {
-                font-size: 1rem;
-                padding: 12px 20px;
-            }
         }
     </style>
 </head>
@@ -383,9 +346,6 @@
         <div class="header">
             <h1>🍼 기저귀 가격비교</h1>
             <p>최저가 기저귀를 찾아보세요! (구글시트 연동)</p>
-            <button class="welcome-gift-btn" onclick="window.open('https://www.aptaclubkorea.com/?invitation_code=23304', '_blank')">
-                🎁 압타클럽 웰컴기프트 네이버페이 5,000원 받기
-            </button>
         </div>
 
         <div class="search-section">
@@ -433,11 +393,6 @@
             <p>마지막 업데이트: <span id="last-updated">-</span></p>
         </div>
     </div>
-
-    <footer>
-        이 사이트는 네이버 쇼핑커넥트와 쿠팡 파트너스 활동의 일환으로 
-        판매 발생시 수수료를 제공받습니다.
-    </footer>
 
     <script>
         // ⚠️ 여기에 본인의 구글시트 ID를 입력하세요!
