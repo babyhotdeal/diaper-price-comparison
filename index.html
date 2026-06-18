@@ -534,7 +534,7 @@
 
                     const cells = parseCSVLine(line);
 
-                    // A=브랜드, B=종류, C=한박스가격, D=박스당팩수, E=단계, F=팩당개수, G=개당가격, H=링크
+                    // A=브랜드, B=종류, C=한박스가격, D=박스당팩수, E=단계, F=팩당개수, G=개당가격, H=링크, I=비고
                     if (cells.length >= 7) {
                         const product = {
                             brand: cells[0] || '',
@@ -654,6 +654,27 @@
             resultsSection.style.display = 'block';
         }
 
+
+        // 가격 계산기
+        function calculatePrice() {
+            const productPrice = parseFloat(document.getElementById('productPrice').value) || 0;
+            const packCount = parseFloat(document.getElementById('packCount').value) || 0;
+            const pieceCount = parseFloat(document.getElementById('pieceCount').value) || 0;
+
+       <div class="price-highlight">
+                    <div class="detail-label">비고</div>
+                    <div class="price-value">${product.pricePerPiece.toLocaleString()}원</div>
+                </div>
+        
+                    }
+                });
+            });
+        });
+
+
+
+
+        
         // 제품 카드 생성
         function createProductCard(product) {
             const card = document.createElement('div');
